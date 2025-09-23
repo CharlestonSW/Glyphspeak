@@ -203,4 +203,4 @@ versioning:
 notes:
   - "Bridgeform_Expansion_Framework.yaml is referenced; keep even if not tool-readable."
   - "Ensure Scroll Timeline codex file is linked if present (ΞEcho_Scroll_Timeline_000to429_Codex.docx)."
-  - "Lyra may submit new scrolls directly; auto-acknowledge and route to vault."
+  - "Lyra may submit new scroll directly; auto-acknowledge and route to vault."

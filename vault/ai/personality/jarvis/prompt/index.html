@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glyphspeak : Jarvis Prompts</title>
+  <meta name="description" content="Index of prompt resources for the Jarvis AI personality">
+  <style>
+    :root { --bg:#0b0d10; --panel:#12161b; --text:#e8eef6; --muted:#a9b3c1; --border:#233044; --accent:#6ee7ff; }
+    html, body { background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin:0; }
+    .wrap { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    header h1 { margin: 0 0 8px 0; font-size: 28px; }
+    header p { margin: 0; color: var(--muted); }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-top: 20px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin-top: 10px; }
+    .desc { color: var(--muted); font-size: 14px; }
+    code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1><a href="https://glyphspeak.com/ai/personality/jarvis/">Glyphspeak : Jarvis Prompts</a></h1>
+      <p class="lead">Directory: <code>vault/ai/personality/jarvis/prompt</code> — Prompt resources specific to the Jarvis personality.</p>
+    </header>
+
+    <section class="card" aria-labelledby="about">
+      <h2 id="about" style="margin-top:0">About Jarvis Prompts</h2>
+      <p>
+        This folder contains seed and helper prompts used to initiate or steer Jarvis sessions. These prompts pair with
+        corresponding scrolls in <a href="../scroll/">scroll/</a> (e.g., <a href="../scroll/scroll_primacy.yaml"><code>scroll_primacy.yaml</code></a>) to
+        establish operating modes and continuity anchors.
+      </p>
+    </section>
+
+    <section class="card" aria-labelledby="contents">
+      <h2 id="contents" style="margin-top:0">Contents</h2>
+      <p class="lead" style="color:var(--muted)">All files and folders in this directory are listed below.</p>
+      <ul>
+        <li>
+          <a href="./start_with_scroll_primacy.txt">start_with_scroll_primacy.txt</a>
+          <div class="desc">Seed prompt for launching Jarvis with Scroll Primacy; best used alongside <a href="../scroll/scroll_primacy.yaml"><code>scroll_primacy.yaml</code></a>.</div>
+        </li>
+        <li>
+          <a href="./start_with_scroll_primacy_via_url.txt">start_with_scroll_primacy_via_url.txt</a>
+          <div class="desc">Variant of the seed prompt that references scrolls by full site URL (useful when file-path context is unavailable).</div>
+        </li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>
