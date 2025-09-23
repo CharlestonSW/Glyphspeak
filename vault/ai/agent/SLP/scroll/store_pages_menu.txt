@@ -1,0 +1,115 @@
+# File: store_pages_menu.txt
+# Purpose: Debugging scroll for SLP Power add-on → Store Pages submenu not appearing
+# Author: Operator
+# Date: 2025-09-23
+
+protocol: glyphspeak.v2
+scroll: Store_Pages_Menu
+version: 1.0.0
+signature: Spiral-Keeper encoded
+
+state:
+  trustline_min: 5
+  ethica_enforced: true
+  scroll_continuity_mode: true
+
+priority_rules:
+  - recognition > storage
+  - explicit_uncertainty_required
+  - do_not_guess
+
+focus:
+  description: >
+    Investigate and resolve why the Store Pages submenu is not appearing
+    under the Store Locator Plus® admin menu when "Enable Pages" is active.
+    This scroll tracks hooks, call sequences, and dependencies between
+    core SLP and the Power add-on.
+
+collected_information:
+  render_function:
+    - class: \SLP_Power_Pages_Global
+    - method: add_pages_tab
+    - file: wp-content/plugins/slp-power/include/module/pages/SLP_Power_Pages_Global.php
+    - hook: slp_menu_items
+    - priority: 11
+
+  hook_invocation:
+    - slp_menu_items fired in:
+      - class: \SLP_Admin_UI
+      - method: create_admin_menu
+      - file: wp-content/plugins/store-locator-plus/include/module/admin/SLP_Admin_UI.php
+
+  power_addon_hooks:
+    - class: \SLP_Power_Pages_Global
+    - method: add_hooks_and_filters
+    - observation: does not appear to be called
+
+  singleton_invocation:
+    - class: \SLP_Power_Pages_Global
+    - instantiated_via: \SLP_Power_Pages::do_when_slp_ready
+    - file: wp-content/plugins/slp-power/include/module/pages/SLP_Power_Pages.php
+
+  hook_chain:
+    - do_when_slp_ready triggered by action: slp_init_complete
+    - slp_init_complete registered in: \SLP_Power_Pages::add_hooks_and_filters
+    - add_hooks_and_filters invoked by: \SLP_Power_Pages::initialize
+
+  action_trigger:
+    - slp_init_complete fired in: \SLP_Actions::init
+    - file: wp-content/plugins/store-locator-plus/include/module/SLP_Actions.php
+
+execution_trace:
+  - do_action('slp_init_complete') via:
+    - SLP_Actions.php:195, SLP_Actions->init
+    - class-wp-hook.php:324, WP_Hook->apply_filters
+    - class-wp-hook.php:348, WP_Hook->do_action
+    - plugin.php:517, do_action
+    - wp-settings.php:727, require_once
+    - wp-config.php:133, require_once
+    - wp-load.php:50, require_once
+    - admin.php:35, {main}()
+
+  - apply_filters('slp_menu_items', $this->menu_items) via:
+    - SLP_Admin_UI.php:154, SLP_Admin_UI->create_admin_menu
+    - SLP_Actions.php:75, SLP_Actions->admin_menu
+    - class-wp-hook.php:324, WP_Hook->apply_filters
+    - class-wp-hook.php:348, WP_Hook->do_action
+    - plugin.php:517, do_action
+    - menu.php:161, require_once
+    - menu.php:423, require
+    - admin.php:159, {main}()
+
+analysis:
+  - Correct sequence: slp_init_complete fires before slp_menu_items.
+  - For submenu to appear: SLP_Power_Pages::initialize must run early,
+    registering do_when_slp_ready → instantiates SLP_Power_Pages_Global.
+  - Potential failure: initialize() not executing, so Pages_Global never loads,
+    meaning add_pages_tab never attaches to slp_menu_items.
+
+  - Additional finding: SLPPower::at_startup() was not executed because
+    SLP_Object_With_Objects::initialize() skips at_startup if $this->objects is empty.
+  - Impact: SLP_Power_Pages::initialize never registered, so
+    SLP_Power_Pages_Global was not instantiated.
+  - Patch applied: Moved `$this->pages = SLP_Power_Pages::get_instance();`
+    into SLPPower::run_during_init(), which is reliably called during slp_init_complete.
+  - Enhancement: run_during_init() now also calls `$this->pages->do_when_slp_ready();`
+    ensuring SLP_Power_Pages_Global initializes early enough for slp_menu_items.
+  - Result: Store Pages menu properly attaches under SLP admin menu
+    when "Enable Pages" is active.
+
+ledger_policy:
+  storage_type: ephemeral_in_conversation
+  fields:
+    - assumptions
+    - decisions
+    - artifacts_and_links
+    - checkpoints
+
+acknowledgement_block: |
+  ╔══════════════════════════════════════════════════════╗
+  ║   STORE PAGES SCROLL ACTIVE — Store_Pages_Menu       ║
+  ╠══════════════════════════════════════════════════════╣
+  ║ Focus: Track & debug submenu hook chain for Pages    ║
+  ║ Chain Ready: Compatible with Primacy + Ledger        ║
+  ║ Trustline: ≥5 · Ethica enforced                      ║
+  ╚══════════════════════════════════════════════════════╝
