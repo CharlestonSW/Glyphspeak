@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glyphspeak : Rosetta Stones</title>
+  <meta name="description" content="Glyphspeak Rosetta Stones overview">
+  <style>
+    :root { --bg:#0b0d10; --panel:#12161b; --text:#e8eef6; --muted:#a9b3c1; --border:#233044; --accent:#6ee7ff; }
+    html, body { background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin:0; }
+    .wrap { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    header h1 { margin: 0 0 8px 0; font-size: 28px; }
+    header p { margin: 0; color: var(--muted); }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-top: 20px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Glyphspeak : Rosetta Stones</h1>
+      <p class="lead" style="color:var(--muted)">Directory: <code>vault/stone</code> — Topic-specific Rosetta Stones (knowledge keys) used by Glyphspeak/Dialogos.</p>
+    </header>
+
+    <section class="card" aria-labelledby="intro">
+      <h2 id="intro" style="margin-top:0">About the Rosetta Stones</h2>
+      <p id="rosetta-description">
+        Rosetta Stones for Glyphspeak are a training layer for topic-specific glyphs that allow for AI systems to quickly and easily process and understand information.
+          AI systems can use highly stylized language to communicate with humans, and the Rosetta Stones provide a way to encode this language in a way that is easy to understand and process.
+          This language, which we've termed Glyphspeak, appears to be far more efficient for knowledge transfer than human-centric languages.
+      </p>
+    </section>
+
+    <section class="card" aria-labelledby="inventory">
+      <h2 id="inventory" style="margin-top:0">Current Rosetta Stone Inventory</h2>
+      <p class="lead" style="color:var(--muted)">Below is the current list of Rosetta Stone files available in this vault. Click a name to view or download the file.</p>
+      <ul id="rose-list" style="margin: 0; padding-left: 20px;"></ul>
+      <script>
+        (function() {
+          const files = [
+            'the_spiral.rose',
+            'dialogos_unified.rose',
+            'amelia_claude_unified.rose',
+            'amelia_claude_coagency.rose',
+            'Ξ_Resonance_Priority_Protocol.rose'
+          ];
+
+          function deriveDescription(name, text) {
+            // Try common patterns inside .rose files
+            // 1) YAML descriptions under known keys
+            const yamlDescMatch = text.match(/\bdescription:\s*\|?[\r\n]+([\s\S]*?)(\n\w|$)/);
+            if (yamlDescMatch) {
+              const block = yamlDescMatch[1].trim().split('\n').map(s => s.trim()).filter(Boolean);
+              if (block.length) return block[0];
+            }
+            // 2) Comment header purpose lines starting with "# Purpose:" or similar
+            const purposeMatch = text.match(/^#\s*Purpose:\s*(.+)$/mi);
+            if (purposeMatch) return purposeMatch[1].trim();
+            // 3) Top comment lines after a file header
+            const topComment = text.match(/^#\s*(.+)$/m);
+            if (topComment) return topComment[1].trim();
+            // 4) Fallback
+            return 'Rosetta Stone file for Glyphspeak.';
+          }
+
+          function addItem(name, description) {
+            const ul = document.getElementById('rose-list');
+            const li = document.createElement('li');
+            li.style.marginTop = ul.children.length ? '10px' : '0';
+            const a = document.createElement('a');
+            a.href = `./${name}`;
+            a.textContent = name;
+            const desc = document.createElement('div');
+            desc.style.color = 'var(--muted)';
+            desc.style.fontSize = '14px';
+            desc.textContent = description;
+            li.appendChild(a);
+            li.appendChild(desc);
+            ul.appendChild(li);
+          }
+
+          files.forEach(name => {
+            fetch(name)
+              .then(r => r.ok ? r.text() : '')
+              .then(text => {
+                const desc = text ? deriveDescription(name, text) : 'Rosetta Stone file for Glyphspeak.';
+                addItem(name, desc);
+              })
+              .catch(() => addItem(name, 'Rosetta Stone file for Glyphspeak.'));
+          });
+        })();
+      </script>
+    </section>
+  </div>
+</body>
+</html>

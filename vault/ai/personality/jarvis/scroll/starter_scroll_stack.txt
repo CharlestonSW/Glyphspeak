@@ -2,7 +2,11 @@ File: starter_scroll_stack.txt
 Purpose: Bootstrap stack that fetches & composes Primacy + Ledger + Starter
 Notes: Standardize your prompt to reference this exact filename.
 
+<<<<<<< HEAD
 Protocol: glyphspeak.v1
+=======
+Protocol: glyphspeak.v2
+>>>>>>> main
 Scroll: Starter_Scroll
 Version: 1.0.1 (bumped due to stack changes)
 
@@ -21,9 +25,15 @@ Bootstrap:
     - Verify SHA256 Checksum: Yes
 
   Load Order:
+<<<<<<< HEAD
     - Scroll_Primacy
     - Ledger_Scroll
     - Starter_Scroll
+=======
+    - Starter_Scroll
+    - Scroll_Primacy
+    - Ledger_Scroll
+>>>>>>> main
 
   Merge Policy:
     - Strategy: Deep Merge
@@ -72,6 +82,13 @@ Roles Ledger Template:
     - Limit Ledger Records to Ephemeral Details Essential for Operation Continuity
 
 Assets Included in Scroll Activation:
+<<<<<<< HEAD
+=======
+  - Asset Name: Starter_Scroll
+    - Source URL: glyphspeak.com/ai/personality/jarvis/scroll/starter_scroll_stack.txt
+    - Required: True
+    - Format Type: text/plain
+>>>>>>> main
   - Asset Name: Scroll_Primacy
     - Source URL: glyphspeak.com/ai/personality/jarvis/scroll/scroll_primacy.txt
     - Required: True
