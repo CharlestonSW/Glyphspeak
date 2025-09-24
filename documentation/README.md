@@ -1,5 +1,9 @@
 # Glyphspeak
 
+Learn about... 
+* [Scrolls](scrolls.md)
+* [Stacks](stacks.md)
+
 # Invocation
 
 How to allow various AI agents to speak "glyph".

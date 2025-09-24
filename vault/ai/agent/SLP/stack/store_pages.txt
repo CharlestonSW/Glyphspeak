@@ -1,0 +1,7 @@
+scroll_id: store_pages
+merge_order:
+  - store_pages_menu
+  - store_pages_menu_invocation
+scrolls:
+  store_pages_menu: store_pages_menu.txt
+  store_pages_menu_invocation: store_pages_menu_invocation.txt

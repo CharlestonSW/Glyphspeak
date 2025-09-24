@@ -1,0 +1,13 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: index.handler
+      CodeUri: s3://glyphspeak-stackloader/cc55c4da796d54c938ed0ab49b551c0c
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+    Metadata:
+      SamResourceId: Function
