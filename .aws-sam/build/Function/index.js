@@ -32,10 +32,22 @@ exports.handler = async (event) => {
             };
         }
 
-        const manifestResponse = await s3.send(
-            new GetObjectCommand({ Bucket: BUCKET_NAME, Key: s3Key })
-        );
-        const manifestRaw = await streamToString(manifestResponse.Body);
+        let manifestRaw;
+        try {
+            const manifestResponse = await s3.send(
+                new GetObjectCommand({ Bucket: BUCKET_NAME, Key: s3Key })
+            );
+            manifestRaw = await streamToString(manifestResponse.Body);
+        } catch (err) {
+            return {
+                statusCode: 404,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    error: "ManifestNotFound",
+                    details: `Missing S3 key: ${s3Key}`,
+                }),
+            };
+        }
         const manifest = yaml.load(manifestRaw);
 
         const scrolls = {};
@@ -43,10 +55,21 @@ exports.handler = async (event) => {
 
         for (const [scrollId, fileName] of Object.entries(manifest.scrolls || {})) {
             const scrollKey = `${scrollPrefix}${fileName}`;
-            const scrollResponse = await s3.send(
-                new GetObjectCommand({ Bucket: BUCKET_NAME, Key: scrollKey })
-            );
-            scrolls[scrollId] = await streamToString(scrollResponse.Body);
+            try {
+                const scrollResponse = await s3.send(
+                    new GetObjectCommand({ Bucket: BUCKET_NAME, Key: scrollKey })
+                );
+                scrolls[scrollId] = await streamToString(scrollResponse.Body);
+            } catch (err) {
+                return {
+                    statusCode: 404,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        error: "ScrollNotFound",
+                        details: `Missing S3 key: ${scrollKey}`,
+                    }),
+                };
+            }
         }
 
         const bundle = {

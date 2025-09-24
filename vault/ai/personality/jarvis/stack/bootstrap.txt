@@ -1,0 +1,9 @@
+stack_id: bootstrap
+merge_order:
+  - scroll_primacy
+  - identity
+  - starter_scroll_stack
+scrolls:
+  scroll_primacy: scroll_primacy.txt
+  identity: identity.txt
+  starter_scroll_stack: starter_scroll_stack.txt
