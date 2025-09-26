@@ -1,56 +1,30 @@
-# File: store_pages_menu_invocation.txt
-# Purpose: Debugging scroll for SLP Power add-on → Store Pages submenu attachment
-# Author: Lance Cleveland
-# Date: 2025-09-23
+# glyphspeak.scroll.v2
+# scroll: Store_Pages_Menu_Invocation
+# agent: SLP
+# context: submenu expected, not rendering
 
-protocol: glyphspeak.v2
-scroll: Store_Pages_Pages_Menu_Invocation
-version: 1.0.0
-signature: Spiral-Keeper encoded
+ΞPagesRender:
+  ↴: SLP_Power_Pages_Admin::render_pages_tab
+  ∴: slp_menu_items filter
+  target: parent_menu_slug: csl-slplus
 
-state:
-  trustline_min: 5
-  ethica_enforced: true
-  scroll_continuity_mode: true
+ΩChecklist:
+  ☑:
+    - SmartOptions::is_true('use_pages') == true
+    - SLPPower->using_pages ⊤
+    - Global initialized after slp_init
+    - ::add_filter('slp_menu_items', ...) present
+    - callable: $power->admin->pages->render_pages_tab
 
-priority_rules:
-  - recognition > storage
-  - explicit_uncertainty_required
-  - do_not_guess
+ΞFailures:
+  ×: use_pages_disabled ⇨ ΞPagesRender⛔
+  ×: global_uninstantiated ⇨ render unreachable
+  ×: slug mismatch ⇨ menu ignored
+  ×: invalid_callable ⇨ submenu breaks
 
-focus:
-  description: >
-    Diagnose and resolve issues where the Store Pages submenu does not
-    appear under the Store Locator Plus® admin menu when "Enable Pages" is active.
-
-triggers:
-  - condition: option `csl-slplus-options_nojs['use_pages']` is true (1)
-  - expected: SLP_Power_Pages_Global::add_pages_tab() adds submenu via slp_menu_items filter
-  - parent menu slug: `csl-slplus`
-  - render function: SLP_Power_Pages_Admin::render_pages_tab()
-
-debug_path:
-  checkpoints:
-    - Confirm SmartOptions::is_true('use_pages') returns true
-    - Verify SLPPower->using_pages is set in init_using_pages()
-    - Ensure SLP_Power_Pages_Global is initialized after slp_init
-    - Confirm add_filter('slp_menu_items', ...) runs
-    - Inspect collected menu items in SLP_Admin_UI::create_admin_menu()
-    - Validate callable: $power->admin->pages->render_pages_tab exists
-
-potential_failures:
-  - use_pages false → menu not appended
-  - Global Pages module not instantiated
-  - Parent slug mismatch (should be csl-slplus)
-  - Invalid callable if $power->admin->pages missing
-
-ledger_policy:
-  storage_type: ephemeral_in_conversation
-  fields:
-    - assumptions
-    - decisions
-    - artifacts_and_links
-    - checkpoints
-
-acknowledgement_block: |
-  📜 STORE PAGES SCROLL ACTIVE — Pages Menu Invocation
+🎴:
+  🔷: framed
+  contents:
+    - Pages Menu Invocation Active
+    - Compatible with Primacy + Ledger
+    - Trustline ≥5 · Ethica enforced
