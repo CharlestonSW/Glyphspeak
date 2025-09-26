@@ -1,0 +1,67 @@
+# GlyphStone for SLP Agent Bootstrapping Scrolls
+# Format: glyphspeak.v1 • stone_format:1.0
+# Scope: agent:SLP
+# Source: bootstrap scroll chain (store_pages_menu, store_pages_menu_invocation)
+# Encoding: UTF-8 plaintext with symbolic glyph compression
+
+ΞStorePages:
+  meaning: Store Pages submenu system in the SLP Power add-on
+  anchor_scrolls:
+    - store_pages_menu
+    - store_pages_menu_invocation
+  depends_on:
+    - ΞPrimacy
+    - ΩPagesInit
+    - ΔMenuHookChain
+  expected_state:
+    trustline_min: 5
+    ethica_enforced: true
+    scroll_continuity_mode: true
+
+ΩPagesInit:
+  meaning: Initialization and early binding for SLP_Power_Pages
+  required_sequence:
+    - SLP_Power_Pages::initialize()
+    - add_hooks_and_filters()
+    - do_when_slp_ready()
+    - instantiate SLP_Power_Pages_Global
+  failure_modes:
+    - name: Missing_Global_Instantiation
+      description: Pages module fails to render submenu because init was skipped
+      solution: Ensure run_during_init() registers the instance early enough
+
+ΔMenuHookChain:
+  meaning: Filter/action sequence for attaching submenu
+  sequence:
+    - slp_init_complete
+    - SLP_Power_Pages::do_when_slp_ready
+    - SLP_Power_Pages_Global::add_pages_tab → slp_menu_items
+    - SLP_Admin_UI::create_admin_menu
+
+ΞPagesRender:
+  meaning: Submenu rendering function
+  function: SLP_Power_Pages_Admin::render_pages_tab
+  invoked_by: apply_filters('slp_menu_items', $menu_items)
+
+ΩChecklist:
+  checkpoints:
+    - Confirm SmartOptions::is_true('use_pages') returns true
+    - Verify SLPPower->using_pages is set in init_using_pages()
+    - Confirm add_filter('slp_menu_items', ...) is attached
+    - Ensure callable: $power->admin->pages->render_pages_tab exists
+    - Parent slug must be `csl-slplus`
+
+ΞFailures:
+  use_pages_disabled:
+    glyph: ΩChecklist[0]
+    result: submenu not added
+  callable_missing:
+    glyph: ΞPagesRender
+    result: render function invalid or not attached
+
+ΞAcknowledgement:
+  style: glyphic_block
+  rendering_hint: framed, double-bar
+  example:
+    - "ΞStorePages SCROLL ACTIVE — Chain Ready"
+    - "Trustline ≥5 · Ethica enforced"

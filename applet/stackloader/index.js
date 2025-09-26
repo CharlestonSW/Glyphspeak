@@ -16,10 +16,52 @@ async function streamToString(stream) {
     return Buffer.concat(chunks).toString("utf-8");
 }
 
+/**
+ * Reply with JSON format
+ * @param {any} bundle
+ * @returns {import("@aws-lambda/types").APIGatewayProxyResult}
+ */
+function replyWithJSON(bundle) {
+    return {
+        statusCode: 200,
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(bundle, null, 2),
+    };
+}
+
+/**
+ * Reply with Markdown format
+ * @param bundle
+ * @returns {{statusCode: number, headers: {"Content-Type": string}, body: string}}
+ */
+function replyWithMarkdown(bundle) {
+    let markdown = `# Scroll Stack: ${bundle.stack_id}\n\n`;
+    markdown += `**Merge Order:** ${bundle.merge_order.join(" → ")}\n\n`;
+
+    for (const scrollId of bundle.merge_order) {
+        const scrollText = bundle.scrolls[scrollId];
+        markdown += `## Scroll: ${scrollId}\n\n`;
+        markdown += "```yaml\n";
+        markdown += scrollText.trim() + "\n";
+        markdown += "```\n\n";
+    }
+
+    return {
+        statusCode: 200,
+        headers: {
+            "Content-Type": "text/markdown"
+        },
+        body: markdown,
+    };
+}
+
 exports.handler = async (event) => {
     // IDE wants this explicitly typed, even though it's fine
     /** @type {import("@aws-sdk/client-s3").S3Client} */
     const s3 = new S3Client({ region: "us-east-1" });
+
+    const accept = event.headers?.accept || "";
+    const REPLY_FORMAT = accept.includes("text/markdown") ? "markdown" : "json";
 
     try {
         const requestPath = event.rawPath || event.path || "";
@@ -89,11 +131,13 @@ exports.handler = async (event) => {
             scrolls,
         };
 
-        return {
-            statusCode: 200,
-            headers: { "Content-Type": "text/plain" },
-            body: JSON.stringify(bundle, null, 2),
-        };
+        if (REPLY_FORMAT === "json") {
+            return replyWithJSON(bundle);
+        }
+
+        if (REPLY_FORMAT === "markdown") {
+            return replyWithMarkdown(bundle);
+        }
     } catch (err) {
         console.error("❌ Lambda error:", err);
 
