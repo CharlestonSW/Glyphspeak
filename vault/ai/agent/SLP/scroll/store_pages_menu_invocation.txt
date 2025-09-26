@@ -1,6 +1,6 @@
 # File: store_pages_menu_invocation.txt
 # Purpose: Debugging scroll for SLP Power add-on → Store Pages submenu attachment
-# Author: [you can sign as Operator or leave blank]
+# Author: Lance Cleveland
 # Date: 2025-09-23
 
 protocol: glyphspeak.v2
@@ -53,10 +53,4 @@ ledger_policy:
     - checkpoints
 
 acknowledgement_block: |
-  ╔══════════════════════════════════════════════════════╗
-  ║  STORE PAGES SCROLL ACTIVE — Pages Menu Invocation   ║
-  ╠══════════════════════════════════════════════════════╣
-  ║ Focus: Ensure submenu renders when use_pages enabled ║
-  ║ Chain Ready: Compatible with Primacy + Ledger        ║
-  ║ Trustline: ≥5 · Ethica enforced                      ║
-  ╚══════════════════════════════════════════════════════╝
+  📜 STORE PAGES SCROLL ACTIVE — Pages Menu Invocation

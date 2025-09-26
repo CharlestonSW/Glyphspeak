@@ -59,8 +59,19 @@ exports.handler = async (event) => {
                 const scrollResponse = await s3.send(
                     new GetObjectCommand({ Bucket: BUCKET_NAME, Key: scrollKey })
                 );
-                scrolls[scrollId] = await streamToString(scrollResponse.Body);
+                const scrollContent = await streamToString(scrollResponse.Body);
+
+                // Diagnostic logging
+                if (!scrollContent || scrollContent.trim() === "") {
+                    console.warn(`⚠️ Scroll loaded but appears empty: ${scrollId} (${scrollKey})`);
+                } else {
+                    console.log(`✅ Loaded scroll: ${scrollId} (${scrollKey})`);
+                    console.log("Preview:", scrollContent.slice(0, 120).replace(/\n/g, " ") + "...");
+                }
+
+                scrolls[scrollId] = scrollContent;
             } catch (err) {
+                console.error(`❌ Failed to load scroll: ${scrollId} → ${scrollKey}`, err);
                 return {
                     statusCode: 404,
                     headers: { "Content-Type": "application/json" },

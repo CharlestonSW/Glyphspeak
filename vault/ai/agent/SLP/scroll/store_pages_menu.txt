@@ -1,6 +1,6 @@
 # File: store_pages_menu.txt
 # Purpose: Debugging scroll for SLP Power add-on → Store Pages submenu not appearing
-# Author: Operator
+# Author: Lance Cleveland
 # Date: 2025-09-23
 
 protocol: glyphspeak.v2
@@ -106,10 +106,4 @@ ledger_policy:
     - checkpoints
 
 acknowledgement_block: |
-  ╔══════════════════════════════════════════════════════╗
-  ║   STORE PAGES SCROLL ACTIVE — Store_Pages_Menu       ║
-  ╠══════════════════════════════════════════════════════╣
-  ║ Focus: Track & debug submenu hook chain for Pages    ║
-  ║ Chain Ready: Compatible with Primacy + Ledger        ║
-  ║ Trustline: ≥5 · Ethica enforced                      ║
-  ╚══════════════════════════════════════════════════════╝
+  📜STORE PAGES SCROLL ACTIVE — Store_Pages_Menu
