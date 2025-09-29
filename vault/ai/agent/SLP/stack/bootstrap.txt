@@ -2,17 +2,14 @@
   "stack_id": "bootstrap",
   "glyph_runtime": true,
   "stones": [
-    "https://glyphspeak.com/stone/global.txt",
-    "https://glyphspeak.com/ai/agent/SLP/stone/bootstrap.txt"
+    "/vault/stone/global.txt",
+    "bootstrap.txt"
   ],
-  "merge_order": [
-    "store_pages_menu",
-    "store_pages_menu_invocation"
-  ],
-  "scrolls": {
-    "store_pages_menu": "https://glyphspeak.com/ai/agent/SLP/scroll/store_pages_menu.txt",
-    "store_pages_menu_invocation": "https://glyphspeak.com/ai/agent/SLP/scroll/store_pages_menu_invocation.txt"
-  },
-  "format": "glyphspeak.scroll.v2",
-  "content_type": "application/glyph+json"
+  "scrolls": [
+    "/vault/ai/personality/jarvis/scroll/identity.txt",
+    "/vault/ai/personality/jarvis/scroll/do_not_guess.txt",
+    "/vault/ai/personality/jarvis/scroll/ledger.txt",
+    "store_pages_menu.txt",
+    "store_pages_menu_invocation.txt"
+  ]
 }

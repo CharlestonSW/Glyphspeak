@@ -1,9 +1,12 @@
-stack_id: bootstrap
-merge_order:
-  - scroll_primacy
-  - identity
-  - starter_scroll_stack
-scrolls:
-  scroll_primacy: scroll_primacy.txt
-  identity: identity.txt
-  starter_scroll_stack: starter_scroll_stack.txt
+{
+    "stack_id": "bootstrap",
+    "glyph_runtime": true,
+    "stones": [
+      "/vault/stone/global.txt"
+    ],
+    "scrolls": [
+      "identity.txt",
+      "do_not_guess.txt",
+      "ledger.txt"
+    ]
+}

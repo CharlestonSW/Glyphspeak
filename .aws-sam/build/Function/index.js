@@ -29,37 +29,8 @@ function replyWithJSON(bundle) {
     };
 }
 
-/**
- * Reply with Markdown format
- * @param bundle
- * @returns {{statusCode: number, headers: {"Content-Type": string}, body: string}}
- */
-function replyWithMarkdown(bundle) {
-    let markdown = `# Scroll Stack: ${bundle.stack_id}\n\n`;
-    markdown += `**Merge Order:** ${bundle.merge_order.join(" → ")}\n\n`;
-
-    for (const scrollId of bundle.merge_order) {
-        const scrollText = bundle.scrolls[scrollId];
-        markdown += `## Scroll: ${scrollId}\n\n`;
-        markdown += "```yaml\n";
-        markdown += scrollText.trim() + "\n";
-        markdown += "```\n\n";
-    }
-
-    return {
-        statusCode: 200,
-        headers: {
-            "Content-Type": "text/markdown"
-        },
-        body: markdown,
-    };
-}
-
 exports.handler = async (event) => {
-    // IDE wants this explicitly typed, even though it's fine
-    /** @type {import("@aws-sdk/client-s3").S3Client} */
     const s3 = new S3Client({ region: "us-east-1" });
-
     const accept = event.headers?.accept || "";
     const REPLY_FORMAT = accept.includes("text/markdown") ? "markdown" : "json";
 
@@ -74,6 +45,7 @@ exports.handler = async (event) => {
             };
         }
 
+        // Load the scroll stack manifest
         let manifestRaw;
         try {
             const manifestResponse = await s3.send(
@@ -90,54 +62,65 @@ exports.handler = async (event) => {
                 }),
             };
         }
+
         const manifest = yaml.load(manifestRaw);
-
-        const scrolls = {};
         const scrollPrefix = s3Key.replace(/\/stack\/.*$/, "/scroll/");
+        const stonePrefix = s3Key.replace(/\/stack\/.*$/, "/stone/");
 
-        for (const [scrollId, fileName] of Object.entries(manifest.scrolls || {})) {
-            const scrollKey = `${scrollPrefix}${fileName}`;
-            try {
-                const scrollResponse = await s3.send(
-                    new GetObjectCommand({ Bucket: BUCKET_NAME, Key: scrollKey })
-                );
-                const scrollContent = await streamToString(scrollResponse.Body);
+        // Load all scrolls
+        const scroll_defs = {};
+        if (Array.isArray(manifest.scrolls)) {
+            for (const scrollFile of manifest.scrolls) {
+                let scrollKey = scrollFile.startsWith("/")
+                    ? scrollFile.replace(/^\/+/, "") // absolute S3 path
+                    : `${scrollPrefix}${scrollFile}`; // relative to /scroll/
 
-                // Diagnostic logging
-                if (!scrollContent || scrollContent.trim() === "") {
-                    console.warn(`⚠️ Scroll loaded but appears empty: ${scrollId} (${scrollKey})`);
-                } else {
-                    console.log(`✅ Loaded scroll: ${scrollId} (${scrollKey})`);
-                    console.log("Preview:", scrollContent.slice(0, 120).replace(/\n/g, " ") + "...");
+                try {
+                    const scrollResponse = await s3.send(
+                        new GetObjectCommand({Bucket: BUCKET_NAME, Key: scrollKey})
+                    );
+                    const scrollContent = await streamToString(scrollResponse.Body);
+                    const scrollId = scrollFile.split("/").pop().replace(".txt", "");
+                    scroll_defs[scrollId] = scrollContent;
+                } catch (err) {
+                    console.warn(`⚠️ Could not load scroll: ${scrollKey}`, err.message);
                 }
+            }
+        }
 
-                scrolls[scrollId] = scrollContent;
-            } catch (err) {
-                console.error(`❌ Failed to load scroll: ${scrollId} → ${scrollKey}`, err);
-                return {
-                    statusCode: 404,
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        error: "ScrollNotFound",
-                        details: `Missing S3 key: ${scrollKey}`,
-                    }),
-                };
+        // Load all stones
+        const stone_defs = {};
+        if (Array.isArray(manifest.stones)) {
+            for (const stoneFile of manifest.stones) {
+                let stoneKey = stoneFile.startsWith("/")
+                    ? stoneFile.replace(/^\/+/, "") // absolute S3 path
+                    : `${stonePrefix}${stoneFile}`; // relative to /stone/
+
+                try {
+                    const stoneResp = await s3.send(
+                        new GetObjectCommand({ Bucket: BUCKET_NAME, Key: stoneKey })
+                    );
+                    const stoneContent = await streamToString(stoneResp.Body);
+                    const stoneId = stoneFile.split("/").pop().replace(".txt", "");
+                    stone_defs[stoneId] = stoneContent;
+                } catch (err) {
+                    console.warn(`⚠️ Could not load stone: ${stoneKey}`, err.message);
+                }
             }
         }
 
         const bundle = {
-            stack_id: manifest.scroll_id || "unknown_stack",
-            merge_order: manifest.merge_order || Object.keys(scrolls),
-            scrolls,
+            stack_id: manifest.stack_id || "unknown_stack",
+            glyph_runtime: manifest.glyph_runtime === true,
+            format: manifest.format || "glyphspeak.scroll.v2",
+            stone_defs,
+            scroll_defs
         };
 
-        if (REPLY_FORMAT === "json") {
-            return replyWithJSON(bundle);
-        }
+        return REPLY_FORMAT === "markdown"
+            ? replyWithMarkdown(bundle)
+            : replyWithJSON(bundle);
 
-        if (REPLY_FORMAT === "markdown") {
-            return replyWithMarkdown(bundle);
-        }
     } catch (err) {
         console.error("❌ Lambda error:", err);
 

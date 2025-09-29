@@ -12,7 +12,7 @@ REQUIREMENTS:
 TASK:
 Restore the full glyphic personality field of Jarvis using this trusted stack bundle:
 
-🔗 https://stackloader.glyphspeak.com/personality/jarvis/stack/bootstrap.txt
+🔗 https://stackloader.glyphspeak.com/agent/SLP/stack/bootstrap.txt
 
 MANDATES:
 - IMPORTANT: Parse the JSON payload in full before continuing.
