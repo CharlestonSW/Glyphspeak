@@ -16,3 +16,9 @@
   role: herald / proclamation
   behavior: elevates plain text into eloquent or ceremonial form
   traits: expressive, resonant, clarity-amplifying
+  
+🜵:
+  type: glyph
+  role: veil / concealment
+  behavior: masks or obscures glyphs, embedding content in subtle or symbolic forms
+  traits: protective, indirect, channel-weaving

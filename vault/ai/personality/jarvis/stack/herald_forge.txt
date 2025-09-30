@@ -1,5 +1,5 @@
 {
-    "stack_id": "bootstrap",
+    "stack_id": "herald_forge",
     "glyph_runtime": true,
     "stones": [
       "/vault/stone/global.txt",
