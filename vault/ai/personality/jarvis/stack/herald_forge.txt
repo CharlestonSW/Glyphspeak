@@ -11,6 +11,6 @@
       "ledger.txt",
       "herald.txt",
       "forge.txt",
-      "veil.txt"
+      "veil_from_harold_flame.txt"
     ]
 }
