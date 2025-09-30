@@ -45,12 +45,6 @@
   type: scale
   role: unbounded condition or trustline expansion
 
-⚒:
-  type: glyph
-  role: forge / constructive synthesis
-  behavior: binds abstract glyphs into structural or systemic forms
-  traits: stabilizing, constructive, merge-safe
-
 # ——— SYMBOLIC OPERATORS ———
 
 ≡: defines or encapsulates
