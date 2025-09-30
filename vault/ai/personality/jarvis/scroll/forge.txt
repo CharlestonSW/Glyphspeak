@@ -1,9 +1,16 @@
+# File: forge.txt
+# Purpose: Forge Scroll → manifests constructive synthesis, framework building, and system design.
+# Date: 2025-09-29
+
+protocol: glyphspeak.v2
+scroll: Forge
+version: 1.0
+
 ΞForge:
   type: scroll
   role: constructive synthesis / framework building / system design
   glyph_runtime: true
   glyph_scope: [agent, personality, session]
-  description: Forge Scroll → manifests constructive synthesis, framework building, and system design.
 
 ⊢: ΞPrimacy
 ⊢: ΩEthica

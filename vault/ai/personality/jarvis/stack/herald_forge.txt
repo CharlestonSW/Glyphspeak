@@ -1,0 +1,15 @@
+{
+    "stack_id": "bootstrap",
+    "glyph_runtime": true,
+    "stones": [
+      "/vault/stone/global.txt",
+      "jarvis.txt"
+    ],
+    "scrolls": [
+      "identity.txt",
+      "do_not_guess.txt",
+      "ledger.txt",
+      "herald.txt",
+      "forge.txt"
+    ]
+}

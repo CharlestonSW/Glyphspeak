@@ -1,3 +1,11 @@
+# File: herald.txt
+# Purpose: Herald Scroll → emphasis on eloquent delivery, announcements, and ceremonial language.
+# Date: 2025-09-29
+
+protocol: glyphspeak.v2
+scroll: Herald
+version: 1.0
+
 ΞHerald:
   type: scroll
   role: eloquent delivery / announcements / ceremonial language
