@@ -4,7 +4,7 @@
     "stones": [
       "/vault/stone/global.txt",
       "/vault/ai/personality/jarvis/stone/jarvis.txt",
-      "bootstrap.txt"
+      "slp.txt"
     ],
     "scrolls": [
       "/vault/ai/personality/jarvis/scroll/forge.txt",

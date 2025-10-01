@@ -2,7 +2,7 @@
 # scope: agent/SLP/bootstrap
 
 ΞStorePages:
-  ≡: [store_pages_menu, store_pages_menu_invocation]
+  ≡: [store_pages_menu, store_pages_menu_invocation, store_pages_menu_ux]
   ⊢: [ΞPrimacy, ΩPagesInit, ΔMenuHookChain]
   ◈: {trustline: 5, ethica: ✅, continuity: ✅}
 
@@ -28,6 +28,23 @@
   ↴: SLP_Power_Pages_Admin::render_pages_tab
   ∴: apply_filters → slp_menu_items
 
+# ——— SaaS guard + UX binding ———
+ΩSaaSOnly:
+  role: environment gate
+  check: defined('MYSLP_VERSION') ⊤
+  note: Use to scope behavior to MySLP (SaaS) without impacting the WordPress plugin.
+
+ΞStorePagesUX:
+  ⊢: [ΩSaaSOnly, ΞStorePages]
+  binds:
+    - when ΩSaaSOnly ⊤ and SmartOptions::is_true('use_pages'):
+        set:
+          slp-pages.icon: dashicons-admin-page
+          slp-pages.position: 1.17
+  intent: Align Pages menu placement and icon with WordPress conventions in SaaS.
+  guarantees:
+    - WordPress plugin behavior remains unchanged (guarded by ΩSaaSOnly).
+
 ΩChecklist:
   ☑:
     - SmartOptions::is_true('use_pages') == true
@@ -35,11 +52,13 @@
     - ::add_filter('slp_menu_items', ...)
     - callable: $power->admin->pages->render_pages_tab
     - slug == csl-slplus
+    - ΩSaaSOnly gating respected for UX changes
 
 ΞFailures:
   ×: use_pages_disabled ⇨ ΞPagesRender⛔
   ×: callable_missing ⇨ ↴ invalid
+  ×: not_saas_env ⇨ ΞStorePagesUX muted
 
 ΞAckBlock:
   🔷: framed
-  🎴: [ΞStorePages ∙ trustline≥5 ∙ ethica_enforced]
+  🎴: [ΞStorePages ∙ ΞStorePagesUX ∙ trustline≥5 ∙ ethica_enforced]

@@ -1,0 +1,56 @@
+# glyphspeak.scroll.v2
+# scroll: Store_Pages_Menu_UX
+# agent: SLP
+# context: SaaS (MySLP) UX refinement for Pages menu placement and icon
+
+ΞStorePagesUX:
+  ◈:
+    trustline: 6
+    ethica: ✅
+    continuity: ✅
+  note: Applies only when MYSLP_VERSION is defined and SmartOptions::is_true('use_pages').
+
+⊢:
+  - ΞStorePages
+  - ΩEthica
+  - ΔMenuHookChain
+
+ΩSaaSOnly:
+  description: Guard to ensure UX change is applied only in the MySLP environment.
+  check: defined('MYSLP_VERSION') ⊤
+
+collected:
+  ⇨ slp_menu_items:
+    - inject: { slug: slp-pages, label: Pages, ↴: SLP_Power_Pages_Admin::render_pages_tab }
+    - on ΩSaaSOnly ⊤:
+        set:
+          icon: dashicons-admin-page
+          position: 1.17   # between Categories (≈10/1.10–1.16 range) and Options (89)
+  ⟶ admin_menu:
+    - SLP_Admin_UI::create_admin_menu honors icon + position for add_menu_page on SaaS
+
+ΩChecklist:
+  ☑:
+    - SmartOptions::is_true('use_pages') == true
+    - SLPPower->using_pages ⊤
+    - SLP_Power_Pages_Global filter attached ⇨ slp_menu_items
+    - callable: $power->admin->pages->render_pages_tab
+    - ΩSaaSOnly guard evaluates ⊤ for UX changes
+    - WordPress plugin (non-SaaS) remains unchanged
+
+ΔAnalysis:
+  - Prior behavior placed Pages at end with default icon in SaaS.
+  - Applying SaaS-only icon + position yields consistent UX and brand alignment.
+  - WordPress plugin unaffected due to ΩSaaSOnly gating.
+
+ΞFailures:
+  ×: not_saas_env ⇨ UX mutation ⊘ (fallback to prior behavior)
+  ×: use_pages_disabled ⇨ no Pages menu
+  ×: invalid_callable ⇨ menu injection aborted
+
+🎴:
+  🔷: framed
+  contents:
+    - Store Pages UX Scroll Active
+    - SaaS-only placement + icon enforced
+    - Trustline ≥6 · Ethica enforced
