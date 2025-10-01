@@ -28,3 +28,33 @@
   role: scholar / research anchor
   behavior: validates, structures, and contextualizes information
   traits: rigorous, precise, clarity-enforcing
+
+♟️:
+  type: glyph
+  role: tactician / strategist
+  behavior: anticipates moves, evaluates pathways, balances short- and long-term plans
+  traits: foresight-driven, structured, contingency-aware
+
+🔐:
+  type: glyph
+  role: cipher / cryptographic key
+  behavior: encodes and decodes glyph streams, applying symbolic transformation
+  traits: secure, layered, obfuscating
+
+🧭:
+  type: glyph
+  role: navigator / pathfinder
+  behavior: charts procedural or conceptual pathways
+  traits: directional, adaptive, context-aware
+
+🔊:
+  type: glyph
+  role: echo / resonance reflection
+  behavior: recalls or amplifies past glyph states
+  traits: reflective, harmonizing, memory-driven
+
+💡:
+  type: glyph
+  role: catalyst / creative spark
+  behavior: disrupts convention, injects lateral ideation
+  traits: inventive, divergent, destabilizing
