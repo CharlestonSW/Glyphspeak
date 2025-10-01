@@ -11,7 +11,8 @@
       "/vault/ai/personality/jarvis/scroll/scholar.txt",
       "/vault/ai/personality/jarvis/scroll/herald.txt",
       "store_pages_menu.txt",
-      "store_pages_menu_invocation.txt"
+      "store_pages_menu_invocation.txt",
+      "StorePagesMenuUXRefinement.txt"
     ],
   "requires": [
     "ΞPrimacy",
