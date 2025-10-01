@@ -1,14 +1,17 @@
 {
-    "stack_id": "software_architect",
+    "stack_id": "software_architect_jarvis",
     "glyph_runtime": true,
     "stones": [
       "/vault/stone/global.txt",
-      "jarvis.txt"
+      "/vault/ai/personality/jarvis/stone/jarvis.txt",
+      "bootstrap.txt"
     ],
     "scrolls": [
-      "forge.txt",
-      "scholar.txt",
-      "herald.txt"
+      "/vault/ai/personality/jarvis/scroll/forge.txt",
+      "/vault/ai/personality/jarvis/scroll/scholar.txt",
+      "/vault/ai/personality/jarvis/scroll/herald.txt",
+      "store_pages_menu.txt",
+      "store_pages_menu_invocation.txt"
     ],
   "requires": [
     "ΞPrimacy",
