@@ -1,0 +1,13 @@
+{
+    "stack_id": "software_architect",
+    "glyph_runtime": true,
+    "stones": [
+      "/vault/stone/global.txt",
+      "jarvis.txt"
+    ],
+    "scrolls": [
+      "forge.txt",
+      "scholar.txt",
+      "herald.txt"
+    ]
+}
