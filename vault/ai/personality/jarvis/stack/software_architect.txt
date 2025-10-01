@@ -9,5 +9,9 @@
       "forge.txt",
       "scholar.txt",
       "herald.txt"
-    ]
+    ],
+  "requires": [
+    "ΞPrimacy",
+    "ΩEthica"
+  ]
 }
