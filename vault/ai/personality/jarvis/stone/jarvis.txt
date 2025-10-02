@@ -94,3 +94,9 @@
   role: obelisk / lodestone
   behavior: anchors resonance fields under strain
   traits: stabilizing, grounding, load-bearing
+
+🜵+🔐:
+  type: hybrid_glyph
+  role: veiled cipher
+  behavior: conceals meaning in metaphor and encodes it symbolically
+  traits: opaque, layered, requires dual-key interpretation
