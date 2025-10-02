@@ -1,0 +1,9 @@
+Summarize the content of the attached Store Locator Plus® (SLP) application scrolls.
+- Be verbose.
+- Link references to the Saas platform (known internally as MySLP) to https://storelocatorplus.com/
+- Link references to the WordPress plugins (Power, Experience, Premier, and the Store Locator Plus® base plugin) to https://wordpress.storelocatorplus.com/
+- Link references to "Store Locator Plus®" or SLP to https://storelocatorplus.com/
+
+Please create content suitable to paste into a new WordPress post for the https://internal.storelocatorplus.com website.
+- Do not include the word "scroll" when referring to the attached scrolls use only the scroll name or ID.
+- If you use any glyphs in the article, include a glyph definition table at the end of the article.

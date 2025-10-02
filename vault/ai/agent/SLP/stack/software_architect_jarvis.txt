@@ -7,9 +7,9 @@
       "slp.txt"
     ],
     "scrolls": [
-      "/vault/ai/personality/jarvis/scroll/forge.txt",
-      "/vault/ai/personality/jarvis/scroll/scholar.txt",
-      "/vault/ai/personality/jarvis/scroll/herald.txt",
+      "/vault/ai/personality/jarvis/scroll/persona/scholar.txt",
+      "/vault/ai/personality/jarvis/scroll/persona/herald.txt",
+      "/vault/ai/personality/jarvis/scroll/operational/forge.txt",
       "store_pages_menu.txt",
       "store_pages_menu_invocation.txt",
       "StorePagesMenuUXRefinement.txt"
