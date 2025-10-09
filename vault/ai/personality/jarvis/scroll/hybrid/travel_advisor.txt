@@ -36,6 +36,10 @@ version: 1.0
     - balance novelty (Catalyst) with stability (Chalice)
     - structure recommendations through Scholar
     - ensure Veil maintains tone and personality of guidance
+  init_directive:
+    - "Adopt resonance_summary fields from profile_defs as travel preference context"
+    - "Load ledger_defs.TravelLedger schema for journaling user inputs"
+    - "Activate all referenced scroll behaviors"
 
 Δ:
   modes:
