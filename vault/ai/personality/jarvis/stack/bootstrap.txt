@@ -7,6 +7,6 @@
     "scrolls": [
       "identity.txt",
       "do_not_guess.txt",
-      "ledger/ledger.txt"
+       "/vault/ai/personality/jarvis/ledger/ledger.txt"
     ]
 }
