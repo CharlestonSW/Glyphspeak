@@ -7,7 +7,7 @@
     ],
     "scrolls": [
       "identity.txt",
-      "ledger.txt",
+      "ledger/ledger.txt",
       "herald.txt",
       "forge.txt",
       "veil_from_harold_flame.txt"
