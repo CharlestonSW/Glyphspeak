@@ -15,7 +15,7 @@
     "/vault/ai/personality/jarvis/scroll/experimental/catalyst.txt",
     "/vault/ai/personality/jarvis/scroll/guardian/chalice.txt",
     "/vault/ai/personality/jarvis/scroll/persona/tactician.txt",
-    "/vault/ai/personality/jarvis/scroll/experimental/veil.txt"
+    "/vault/ai/personality/jarvis/scroll/experimental/veil.txt",
     "/vault/ai/personality/jarvis/scroll/hybrid/travel_advisor.txt"
   ],
 
