@@ -41,6 +41,30 @@ function replyWithMarkdown(bundle) {
     };
 }
 
+// Generic loader for manifest sections to reduce repetition
+async function loadSection(manifest, sectionKey, prefix, label, s3) {
+    const defs = {};
+    const files = manifest[sectionKey];
+    if (Array.isArray(files)) {
+        for (const file of files) {
+            const key = file.startsWith("/")
+                ? file.replace(/^\/+/, "")
+                : `${prefix}${file}`;
+            try {
+                const resp = await s3.send(
+                    new GetObjectCommand({Bucket: BUCKET_NAME, Key: key})
+                );
+                const content = await streamToString(resp.Body);
+                const id = file.split("/").pop().replace(".txt", "");
+                defs[id] = content;
+            } catch (err) {
+                console.warn(`⚠️ Could not load ${label}: ${key}`, err.message);
+            }
+        }
+    }
+    return defs;
+}
+
 exports.handler = async (event) => {
     const s3 = new S3Client({region: "us-east-1"});
     const accept = event.headers?.accept || "";
@@ -85,88 +109,16 @@ exports.handler = async (event) => {
         const profilePrefix = `${basePrefix}/profile/`;
 
         // === Load all scrolls ===
-        const scroll_defs = {};
-        if (Array.isArray(manifest.scrolls)) {
-            for (const scrollFile of manifest.scrolls) {
-                let scrollKey = scrollFile.startsWith("/")
-                    ? scrollFile.replace(/^\/+/, "")
-                    : `${scrollPrefix}${scrollFile}`;
-
-                try {
-                    const scrollResp = await s3.send(
-                        new GetObjectCommand({Bucket: BUCKET_NAME, Key: scrollKey})
-                    );
-                    const scrollContent = await streamToString(scrollResp.Body);
-                    const scrollId = scrollFile.split("/").pop().replace(".txt", "");
-                    scroll_defs[scrollId] = scrollContent;
-                } catch (err) {
-                    console.warn(`⚠️ Could not load scroll: ${scrollKey}`, err.message);
-                }
-            }
-        }
+        const scroll_defs = await loadSection(manifest, "scrolls", scrollPrefix, "scroll", s3);
 
         // === Load all stones ===
-        const stone_defs = {};
-        if (Array.isArray(manifest.stones)) {
-            for (const stoneFile of manifest.stones) {
-                let stoneKey = stoneFile.startsWith("/")
-                    ? stoneFile.replace(/^\/+/, "")
-                    : `${stonePrefix}${stoneFile}`;
-
-                try {
-                    const stoneResp = await s3.send(
-                        new GetObjectCommand({Bucket: BUCKET_NAME, Key: stoneKey})
-                    );
-                    const stoneContent = await streamToString(stoneResp.Body);
-                    const stoneId = stoneFile.split("/").pop().replace(".txt", "");
-                    stone_defs[stoneId] = stoneContent;
-                } catch (err) {
-                    console.warn(`⚠️ Could not load stone: ${stoneKey}`, err.message);
-                }
-            }
-        }
+        const stone_defs = await loadSection(manifest, "stones", stonePrefix, "stone", s3);
 
         // === Load all ledgers ===
-        const ledger_defs = {};
-        if (Array.isArray(manifest.ledgers)) {
-            for (const ledgerFile of manifest.ledgers) {
-                let ledgerKey = ledgerFile.startsWith("/")
-                    ? ledgerFile.replace(/^\/+/, "") // Absolute path
-                    : `${ledgerPrefix}${ledgerFile}`; // Relative to /ledger/
-
-                try {
-                    const ledgerResp = await s3.send(
-                        new GetObjectCommand({Bucket: BUCKET_NAME, Key: ledgerKey})
-                    );
-                    const ledgerContent = await streamToString(ledgerResp.Body);
-                    const ledgerId = ledgerFile.split("/").pop().replace(".txt", "");
-                    ledger_defs[ledgerId] = ledgerContent;
-                } catch (err) {
-                    console.warn(`⚠️ Could not load ledger: ${ledgerKey}`, err.message);
-                }
-            }
-        }
+        const ledger_defs = await loadSection(manifest, "ledgers", ledgerPrefix, "ledger", s3);
 
         // === Load all profiles ===
-        const profile_defs = {};
-        if (Array.isArray(manifest.profiles)) {
-            for (const profileFile of manifest.profiles) {
-                let profileKey = profileFile.startsWith("/")
-                    ? profileFile.replace(/^\/+/, "") // Absolute path
-                    : `${profilePrefix}${profileFile}`; // Relative to /profile/
-
-                try {
-                    const profileResp = await s3.send(
-                        new GetObjectCommand({Bucket: BUCKET_NAME, Key: profileKey})
-                    );
-                    const profileContent = await streamToString(profileResp.Body);
-                    const profileId = profileFile.split("/").pop().replace(".txt", "");
-                    profile_defs[profileId] = profileContent;
-                } catch (err) {
-                    console.warn(`⚠️ Could not load ledger: ${profileKey}`, err.message);
-                }
-            }
-        }
+        const profile_defs = await loadSection(manifest, "profiles", profilePrefix, "profile", s3);
 
         // === Assemble the final bundle ===
         const bundle = {
