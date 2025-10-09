@@ -42,3 +42,6 @@ https://stackloader.glyphspeak.com/agent/SLP/stack/store_pages.txt
         │ - Loads scrolls from S3            
         │ - Builds scroll_bundle             
         │ - Returns as JSON (content-type: text/plain)
+
+See [The Stack Loader Manifest documentation](stackloader_manifest.md) for more details.
+

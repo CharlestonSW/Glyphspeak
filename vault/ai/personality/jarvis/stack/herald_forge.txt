@@ -11,7 +11,7 @@
       "forge.txt",
       "veil_from_harold_flame.txt"
     ],
-  "ledger": [
+  "ledgers": [
     "ledger.txt",
   ]
 }

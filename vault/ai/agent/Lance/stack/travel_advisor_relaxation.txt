@@ -1,0 +1,29 @@
+{
+  "stack_id": "travel_advisor_relaxation",
+  "glyph_runtime": true,
+  "format": "glyphspeak.scroll.v2",
+
+  "stones": [
+    "/vault/stone/global.txt",
+    "/vault/ai/personality/jarvis/stone/jarvis.txt"
+  ],
+
+  "scrolls": [
+    "/vault/ai/personality/jarvis/scroll/operational/archivist.txt",
+    "/vault/ai/personality/jarvis/scroll/persona/scholar.txt",
+    "/vault/ai/personality/jarvis/scroll/experimental/echo.txt",
+    "/vault/ai/personality/jarvis/scroll/experimental/catalyst.txt",
+    "/vault/ai/personality/jarvis/scroll/guardian/chalice.txt",
+    "/vault/ai/personality/jarvis/scroll/persona/tactician.txt",
+    "/vault/ai/personality/jarvis/scroll/experimental/veil.txt"
+    "/vault/ai/personality/jarvis/scroll/hybrid/travel_advisor.txt"
+  ],
+
+  "ledgers": [
+    "/vault/ai/personality/jarvis/ledger/travel_ledger.txt"
+  ],
+
+  "profiles": [
+    "travel_relaxation.txt"
+  ]
+}

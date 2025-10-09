@@ -10,7 +10,7 @@
     "store_pages_menu.txt",
     "store_pages_menu_invocation.txt"
   ],
-  "ledger": [
+  "ledgers": [
      "/vault/ai/personality/jarvis/ledger/ledger.txt"
   ]
 }

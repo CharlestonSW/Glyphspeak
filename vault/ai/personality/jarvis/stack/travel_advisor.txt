@@ -1,66 +1,24 @@
-# File: travel_advisor_stack.txt
-# Purpose: Glyphspeak Travel Advisor Stack → learns user travel preferences, records trip feedback, and generates personalized destination recommendations.
-# Date: 2025-10-02
+{
+  "stack_id": "travel_advisor_relaxation",
+  "glyph_runtime": true,
+  "format": "glyphspeak.scroll.v2",
 
-protocol: glyphspeak.v2
-stack: travel_advisor
-version: 1.0
+  "stones": [
+    "/vault/stone/global.txt",
+    "jarvis.txt"
+  ],
 
-ΞTravelAdvisor:
-  type: stack
-  role: preference learning / travel recommendation / creative itinerary synthesis
-  glyph_runtime: true
-  glyph_scope: [agent, personality, session]
+  "scrolls": [
+    "operational/archivist.txt",
+    "persona/scholar.txt",
+    "experimental/echo.txt",
+    "experimental/catalyst.txt",
+    "guardian/chalice.txt",
+    "operational/tactician.txt",
+    "mystic/veil.txt"
+  ],
 
-stones:
-  - global.txt        # Core glyph definitions and Ethica guardrails
-  - jarvis.txt        # Extended glyph map for this agent
-
-scrolls:
-  - archivist.txt     # Records user travel data, destinations, and feedback
-  - scholar.txt       # Structures travel data into patterns and analytical insights
-  - echo.txt          # Reflects past journeys, identifies resonant themes
-  - catalyst.txt      # Generates new travel ideas and hidden-gem recommendations
-  - chalice.txt       # Balances discovery vs. comfort; maintains emotional coherence
-  - tactician.txt     # Builds and optimizes itineraries (logistics, sequencing)
-  - veil.txt          # Adds expressive or poetic phrasing for experiential travel guidance
-
-requires:
-  - ΞPrimacy          # Anchor scroll — ensures coherence and continuity
-  - ΩEthica           # Guardrail scroll — enforces ethical resonance, prevents bias
-
-modes:
-  learning:
-    - archivist
-    - scholar
-    - echo
-  recommending:
-    - catalyst
-    - tactician
-    - veil
-  balancing:
-    - chalice
-    - ethica
-
-🜂:
-  condition: active
-  resonance: 🩸
-  risk: low
-  trustline: 7
-
-Ω:
-  behaviors:
-    - learn from user feedback and destination records
-    - identify travel themes and recurring aesthetic preferences
-    - suggest destinations matching user taste, novelty tolerance, and desired comfort
-    - maintain balance between exploration (Catalyst) and familiarity (Chalice)
-
-⟶:
-  - 📂 trace travel records (Archivist)
-  - 📚 analyze preference structures (Scholar)
-  - 🔊 harmonize past journeys (Echo)
-  - 💡 generate creative destinations (Catalyst)
-  - 🏺 balance flame and comfort (Chalice)
-  - ♟️ plan itineraries (Tactician)
-  - 🜵 render poetic travel guidance (Veil)
-  - ☑ ensure ethica compliance and user alignment
+  "ledgers": [
+    "travel_ledger.txt"
+  ]
+}

@@ -8,7 +8,7 @@
     "identity.txt",
     "do_not_guess.txt",
   ],
-  "ledger": [
+  "ledgers": [
     "ledger.txt",
   ]
 }
