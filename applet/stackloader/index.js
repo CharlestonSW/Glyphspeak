@@ -1,13 +1,16 @@
 // Lambda handler for GPT-compatible Jarvis scroll stack bootstrap
-// Dynamically reads a .txt scroll stack definition from S3 and resolves scrolls
+// Dynamically reads a .txt scroll stack definition from S3 and resolves stones, scrolls, and ledgers.
 // Example GPT-accessible URL:
-//   https://stackloader.glyphspeak.com/vault/ai/agent/SLP/stack/store_pages.txt
+//   https://stackloader.glyphspeak.com/vault/ai/agent/SLP/stack/bootstrap.txt
 
 const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
 const yaml = require("js-yaml");
 
 const BUCKET_NAME = "glyphspeak";
 
+/**
+ * Convert stream to string
+ */
 async function streamToString(stream) {
     const chunks = [];
     for await (const chunk of stream) {
@@ -17,15 +20,24 @@ async function streamToString(stream) {
 }
 
 /**
- * Reply with JSON format
- * @param {any} bundle
- * @returns {import("@aws-lambda/types").APIGatewayProxyResult}
+ * Reply in JSON format (default)
  */
 function replyWithJSON(bundle) {
     return {
         statusCode: 200,
         headers: { "Content-Type": "text/plain" },
         body: JSON.stringify(bundle, null, 2),
+    };
+}
+
+/**
+ * Optional Markdown reply handler (future use)
+ */
+function replyWithMarkdown(bundle) {
+    return {
+        statusCode: 200,
+        headers: { "Content-Type": "text/markdown" },
+        body: "```json\n" + JSON.stringify(bundle, null, 2) + "\n```",
     };
 }
 
@@ -45,7 +57,7 @@ exports.handler = async (event) => {
             };
         }
 
-        // Load the scroll stack manifest
+        // === Load the stack manifest ===
         let manifestRaw;
         try {
             const manifestResponse = await s3.send(
@@ -64,22 +76,26 @@ exports.handler = async (event) => {
         }
 
         const manifest = yaml.load(manifestRaw);
-        const scrollPrefix = s3Key.replace(/\/stack\/.*$/, "/scroll/");
-        const stonePrefix = s3Key.replace(/\/stack\/.*$/, "/stone/");
 
-        // Load all scrolls
+        // Prefix paths for each category
+        const basePrefix = s3Key.replace(/\/stack\/.*$/, "");
+        const scrollPrefix = `${basePrefix}/scroll/`;
+        const stonePrefix = `${basePrefix}/stone/`;
+        const ledgerPrefix = `${basePrefix}/ledger/`;
+
+        // === Load all scrolls ===
         const scroll_defs = {};
         if (Array.isArray(manifest.scrolls)) {
             for (const scrollFile of manifest.scrolls) {
                 let scrollKey = scrollFile.startsWith("/")
-                    ? scrollFile.replace(/^\/+/, "") // absolute S3 path
-                    : `${scrollPrefix}${scrollFile}`; // relative to /scroll/
+                    ? scrollFile.replace(/^\/+/, "")
+                    : `${scrollPrefix}${scrollFile}`;
 
                 try {
-                    const scrollResponse = await s3.send(
-                        new GetObjectCommand({Bucket: BUCKET_NAME, Key: scrollKey})
+                    const scrollResp = await s3.send(
+                        new GetObjectCommand({ Bucket: BUCKET_NAME, Key: scrollKey })
                     );
-                    const scrollContent = await streamToString(scrollResponse.Body);
+                    const scrollContent = await streamToString(scrollResp.Body);
                     const scrollId = scrollFile.split("/").pop().replace(".txt", "");
                     scroll_defs[scrollId] = scrollContent;
                 } catch (err) {
@@ -88,13 +104,13 @@ exports.handler = async (event) => {
             }
         }
 
-        // Load all stones
+        // === Load all stones ===
         const stone_defs = {};
         if (Array.isArray(manifest.stones)) {
             for (const stoneFile of manifest.stones) {
                 let stoneKey = stoneFile.startsWith("/")
-                    ? stoneFile.replace(/^\/+/, "") // absolute S3 path
-                    : `${stonePrefix}${stoneFile}`; // relative to /stone/
+                    ? stoneFile.replace(/^\/+/, "")
+                    : `${stonePrefix}${stoneFile}`;
 
                 try {
                     const stoneResp = await s3.send(
@@ -109,18 +125,40 @@ exports.handler = async (event) => {
             }
         }
 
+        // === Load all ledgers (NEW) ===
+        const ledger_defs = {};
+        if (Array.isArray(manifest.ledger)) {
+            for (const ledgerFile of manifest.ledger) {
+                let ledgerKey = ledgerFile.startsWith("/")
+                    ? ledgerFile.replace(/^\/+/, "") // Absolute path
+                    : `${ledgerPrefix}${ledgerFile}`; // Relative to /ledger/
+
+                try {
+                    const ledgerResp = await s3.send(
+                        new GetObjectCommand({ Bucket: BUCKET_NAME, Key: ledgerKey })
+                    );
+                    const ledgerContent = await streamToString(ledgerResp.Body);
+                    const ledgerId = ledgerFile.split("/").pop().replace(".txt", "");
+                    ledger_defs[ledgerId] = ledgerContent;
+                } catch (err) {
+                    console.warn(`⚠️ Could not load ledger: ${ledgerKey}`, err.message);
+                }
+            }
+        }
+
+        // === Assemble the final bundle ===
         const bundle = {
             stack_id: manifest.stack_id || "unknown_stack",
             glyph_runtime: manifest.glyph_runtime === true,
             format: manifest.format || "glyphspeak.scroll.v2",
             stone_defs,
-            scroll_defs
+            scroll_defs,
+            ledger_defs, // ✅ New addition
         };
 
         return REPLY_FORMAT === "markdown"
             ? replyWithMarkdown(bundle)
             : replyWithJSON(bundle);
-
     } catch (err) {
         console.error("❌ Lambda error:", err);
 

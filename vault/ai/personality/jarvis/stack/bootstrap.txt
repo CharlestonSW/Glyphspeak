@@ -1,12 +1,14 @@
 {
-    "stack_id": "bootstrap",
-    "glyph_runtime": true,
-    "stones": [
-      "/vault/stone/global.txt"
-    ],
-    "scrolls": [
-      "identity.txt",
-      "do_not_guess.txt",
-       "/vault/ai/personality/jarvis/ledger/ledger.txt"
-    ]
+  "stack_id": "bootstrap",
+  "glyph_runtime": true,
+  "stones": [
+    "/vault/stone/global.txt"
+  ],
+  "scrolls": [
+    "identity.txt",
+    "do_not_guess.txt",
+  ],
+  "ledger": [
+    "ledger.txt",
+  ]
 }
