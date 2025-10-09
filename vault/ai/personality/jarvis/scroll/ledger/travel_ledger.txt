@@ -1,0 +1,62 @@
+# File: travel_ledger.txt
+# Purpose: Travel Ledger → archival record of user destinations, experiences, and feedback for the Travel Advisor stack.
+# Date: 2025-10-02
+
+protocol: glyphspeak.v2
+ledger: travel_ledger
+version: 1.0
+
+ΞTravelLedger:
+  type: ledger
+  role: destination archive / feedback record / resonance trace
+  glyph_runtime: true
+  glyph_scope: [agent, personality, session]
+
+⊢: ΞArchivist
+⊢: ΞScholar
+⊢: ΞEcho
+⊢: ΩEthica
+
+🜂:
+  condition: active
+  resonance: 💠
+  risk: low
+  continuity: ✅
+
+Ω:
+  mode: archival
+  behaviors:
+    - store destination data with metadata (dates, categories, mood)
+    - record user feedback for each location
+    - map aesthetic and emotional resonance patterns
+    - identify recurrent travel motifs (style, comfort, region, vibe)
+    - expose structured insights to Scholar and Echo for pattern learning
+
+---
+
+## ✈️ Entry Template
+
+Each entry in this ledger records one destination or travel experience.
+
+```yaml
+entry:
+  id: <auto_generated_id or date>
+  destination: "<City, Region, or Country>"
+  dates_visited: "<YYYY-MM-DD to YYYY-MM-DD>"
+  trip_type: ["urban", "nature", "coastal", "mountain", "cultural", "wellness", ...]
+  accommodations: ["hotel", "villa", "boutique", "resort", "local home", ...]
+  activities:
+    - "<activity 1>"
+    - "<activity 2>"
+  companions: ["solo", "partner", "family", "friends"]
+  satisfaction_rating: <1–10>
+  highlights:
+    - "<favorite moments or locations>"
+  dislikes:
+    - "<elements that detracted from the experience>"
+  notes: |
+    "<freeform thoughts or reflections>"
+  resonance_tags:
+    - "<keywords for emotional/aesthetic feel>"
+  learning:
+    - "<Archivist summary of insights to inform future recommendations>"

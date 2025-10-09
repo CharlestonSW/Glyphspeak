@@ -7,7 +7,7 @@
   ],
   "scrolls": [
     "/vault/ai/personality/jarvis/scroll/identity.txt",
-    "/vault/ai/personality/jarvis/scroll/ledger.txt",
+    "/vault/ai/personality/jarvis/scroll/ledger/ledger.txt",
     "store_pages_menu.txt",
     "store_pages_menu_invocation.txt"
   ]
