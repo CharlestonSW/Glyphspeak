@@ -16,6 +16,12 @@
       "store_pages_menu_invocation.txt",
       "StorePagesMenuUXRefinement.txt"
     ],
+    "profiles": [
+        "software_environment_profile.txt"
+    ],
+    "ledgers": [
+        "software_environment_profile_ledger_entry.txt"
+    ],
   "requires": [
     "ΞPrimacy",
     "ΩEthica"
