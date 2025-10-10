@@ -1,0 +1,33 @@
+# File: software_environment_profile.txt
+# Purpose: Profile defining the software environment, stack, and resonance factors.
+# Scope: universal (any software project)
+# Date: 2025-10-09
+
+protocol: glyphspeak.v2
+profile: SoftwareEnvironmentProfile
+version: 1.0
+
+resonance_summary:
+  application_name: "<Project or Product Name>"
+  domain: ["web", "mobile", "ai", "cloud", "plugin", "cli"]
+  architecture_style: ["monolith", "microservices", "serverless", "modular"]
+  languages: ["JavaScript", "PHP", "Python", "Go", "Rust", ...]
+  frameworks: ["React", "Vue", "Laravel", "Django", "WordPress", ...]
+  ui_frameworks: ["Tailwind", "Bootstrap", "Material", ...]
+  css_processing: ["SASS", "SCSS", "PostCSS", ...]
+  datastore: ["MySQL", "PostgreSQL", "MongoDB", "Redis", "DynamoDB", ...]
+  api_interfaces: ["REST", "GraphQL", "gRPC", ...]
+  deployment_envs: ["AWS", "GCP", "Azure", "Docker", "Kubernetes", ...]
+  automation_pipelines: ["GitHub Actions", "Jenkins", "CI/CD custom", ...]
+  logging_monitoring: ["Datadog", "Elastic", "Grafana", "Custom"]
+  build_tools: ["Webpack", "Vite", "Gulp", "npm", ...]
+  performance_targets:
+    - "Time-to-first-byte < 200ms"
+    - "Core Web Vitals optimized"
+  security_posture:
+    - "HTTPS enforced"
+    - "OWASP Top 10 reviewed"
+  ux_design_system:
+    - "Responsive layout"
+    - "WCAG 2.1 AA compliance"
+  resonance_tags: ["stability", "usability", "performance", "maintainability"]

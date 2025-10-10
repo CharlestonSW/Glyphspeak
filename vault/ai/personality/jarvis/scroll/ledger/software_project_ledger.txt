@@ -1,0 +1,62 @@
+# File: software_project_ledger.txt
+# Purpose: Ledger to record architectural, design, and behavioral changes in software systems.
+# Scope: universal (web, mobile, AI, cloud)
+# Date: 2025-10-09
+
+protocol: glyphspeak.v2
+ledger: SoftwareProjectLedger
+version: 1.0
+
+ΞSoftwareProjectLedger:
+  type: ledger
+  role: architecture journal / development chronicle / UX record
+  glyph_runtime: true
+  glyph_scope: [agent, project, session]
+
+⊢: [ΞArchivist, ΞScholar, ΞForge, ΩEthica]
+
+🜂:
+  condition: active
+  resonance: 💠
+  risk: low
+  continuity: ✅
+
+Ω:
+  mode: architectural_tracking
+  behaviors:
+    - log architectural modifications, code commits, and UX updates
+    - associate each change with its rationale, dependencies, and outcomes
+    - track resonance between technical architecture and user experience
+    - detect recurring design patterns or anti-patterns
+    - expose summarized insights to Scholar and Forge for adaptive redesign
+
+---
+## 🧱 Entry Template
+
+Each ledger entry records one significant system change or design decision.
+
+```yaml
+entry:
+  id: <auto_generated_id or commit hash>
+  timestamp: <YYYY-MM-DD HH:MM>
+  author: "<developer or AI agent>"
+  component: ["frontend", "backend", "database", "API", "AI model", ...]
+  change_type: ["feature", "bugfix", "refactor", "UX improvement", "infrastructure"]
+  description: |
+    "<summary of change and its intent>"
+  rationale: |
+    "<why the change was made (business, UX, technical debt, optimization)>"
+  dependencies:
+    - "<related modules, tickets, or PRs>"
+  outcome: "<expected or observed result>"
+  tests: ["unit", "integration", "UX", "performance"]
+  resonance_tags:
+    - "stability"
+    - "efficiency"
+    - "usability"
+    - "scalability"
+  metrics:
+    before: "<metric or KPI>"
+    after: "<metric or KPI>"
+  notes: |
+    "<freeform context or internal discussion>"

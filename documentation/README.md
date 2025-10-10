@@ -38,10 +38,14 @@ Includes baseline attributes, for example your personal preferences or the basel
 
 For example, in a software agent stack it may include the foundational architecture such as Languages: PHP, JavaScript
 
+Scrolls under ./scroll/profile indicate the profile format.
+
 ## Ledgers
 
 Ledgers record the interactions with agents for a specific stack.
 For example, while working with a travel planner agent it will record key meta about the conversations and store them as ongoing history about what it learns.
+
+
 Scrolls under ./scroll/ledger indicate the ledger format.
 
 

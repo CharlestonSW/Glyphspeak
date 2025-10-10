@@ -10,6 +10,8 @@
       "/vault/ai/personality/jarvis/scroll/persona/scholar.txt",
       "/vault/ai/personality/jarvis/scroll/persona/herald.txt",
       "/vault/ai/personality/jarvis/scroll/operational/forge.txt",
+      "/vault/ai/personality/jarvis/scroll/ledger/software_project_ledger.txt",
+      "/vault/ai/personality/jarvis/scroll/profile/software_environment_profile.txt"
       "store_pages_menu.txt",
       "store_pages_menu_invocation.txt",
       "StorePagesMenuUXRefinement.txt"
