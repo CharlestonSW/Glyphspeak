@@ -6,9 +6,9 @@
       "jarvis.txt"
     ],
     "scrolls": [
-      "forge.txt",
-      "scholar.txt",
-      "herald.txt"
+      "operational/forge.txt",
+      "persona/scholar.txt",
+      "persona/herald.txt"
     ],
   "requires": [
     "ΞPrimacy",

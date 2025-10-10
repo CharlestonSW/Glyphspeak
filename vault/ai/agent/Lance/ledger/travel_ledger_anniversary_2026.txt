@@ -1,0 +1,79 @@
+{
+  "format": "glyphspeak.ledger.v1",
+  "glyph_runtime": true,
+  "created_utc": "2025-10-09T21:43:35Z",
+  "last_updated_utc": "2025-10-09T21:43:35Z",
+  "entries": [
+    {
+      "entry_type": "trip_history",
+      "trip_id": "trip_2024_puntacana",
+      "title": "Sanctuary Cap Cana",
+      "destination": "Punta Cana, Dominican Republic",
+      "dates": {
+        "year": 2024,
+        "month": 3
+      },
+      "rating_overall": 3.5,
+      "purpose": "relaxation",
+      "companions": [
+        "Jen"
+      ],
+      "notes": [
+        "Good overall but not ready to return yet."
+      ]
+    },
+    {
+      "entry_type": "trip_history",
+      "trip_id": "trip_2024_rivieramaya",
+      "title": "Zoëtry Paraíso de la Bonita",
+      "destination": "Riviera Maya, Mexico",
+      "dates": {
+        "year": 2024,
+        "month": 3
+      },
+      "rating_overall": 5.0,
+      "purpose": "relaxation",
+      "companions": [
+        "Jen"
+      ],
+      "notes": [
+        "Loved it; quiet luxury all-inclusive, spa was under renovation.",
+        "Would revisit for shorter stay."
+      ]
+    },
+    {
+      "entry_type": "marker",
+      "marker_id": "anniversary_trip_2026",
+      "title": "Anniversary Trip 2026",
+      "created_utc": "2025-10-09T21:43:35Z",
+      "notes": [
+        "Planning marker for upcoming anniversary trip."
+      ]
+    },
+    {
+      "entry_type": "planned_trip",
+      "trip_id": "anniv_trip_2025_candidate",
+      "title": "Anniversary Trip (2025-03-07 → 2025-03-15)",
+      "dates": {
+        "planned_depart": "2025-03-07",
+        "planned_return": "2025-03-15",
+        "flexibility_days": 2
+      },
+      "purpose": "relaxation",
+      "areas_of_interest": [
+        "Caribbean",
+        "Mexico"
+      ],
+      "resort_preferences": {
+        "style": "luxury",
+        "all_inclusive": "optional",
+        "adult_oriented": true,
+        "notes": "Prefer adults-only or adult-preferred resorts with minimal children presence."
+      },
+      "companions": [
+        "Jen"
+      ],
+      "status": "planning"
+    }
+  ]
+}

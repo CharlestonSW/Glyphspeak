@@ -7,8 +7,6 @@
   "scrolls": [
     "identity.txt",
     "do_not_guess.txt",
-  ],
-  "ledgers": [
-    "ledger.txt",
+    "ledger/ledger.txt"
   ]
 }

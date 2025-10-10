@@ -1,10 +1,85 @@
-resonance_summary:
-  aesthetic_preferences:
-    - "quiet luxury"
-    - "local authenticity"
-    - "coastal serenity"
-  comfort_level: "high"
-  novelty_tolerance: "medium"
-  preferred_climates: ["temperate", "oceanic"]
-  travel_themes: ["art & design", "nature immersion", "culinary exploration"]
-  avoidance_triggers: ["overcrowded areas", "overly rigid schedules"]
+{
+  "scroll_id": "travel_preferences",
+  "format": "glyphspeak.scroll.v2",
+  "glyph_runtime": true,
+  "schema_version": "1.0",
+  "last_updated_utc": "2025-10-09T21:43:35Z",
+  "owner": "user",
+  "profile": {
+    "home_base": "Charleston, SC",
+    "home_airports": [
+      "CHS"
+    ],
+    "companions_default": [
+      "Jen (spouse)"
+    ],
+    "anniversary_mm_dd": "03-19",
+    "anniversary_trip_rule": "Return on the Sunday before March 19; depart the Saturday a week earlier"
+  },
+  "style": {
+    "pace": "slow",
+    "aesthetic": [
+      "quiet luxury",
+      "authentic local culture"
+    ],
+    "preferred_climates": [
+      "tropical",
+      "oceanic"
+    ],
+    "themes": [
+      "relaxation",
+      "culinary",
+      "spa"
+    ],
+    "avoidance_triggers": [
+      "overcrowded areas",
+      "family-heavy resorts"
+    ],
+    "adult_oriented": true,
+    "adult_ratio_preference": "low child-to-adult ratio (adults-preferred)",
+    "social_vibe": "secluded"
+  },
+  "accommodations": {
+    "types": [
+      "hotel",
+      "Airbnb (for >10-day intl trips)"
+    ],
+    "chain_loyalties": [
+      {
+        "program": "Marriott Bonvoy",
+        "tier": "Titanium Elite"
+      }
+    ],
+    "notes": [
+      "Preferred hotel chain: Marriott"
+    ]
+  },
+  "air_travel": {
+    "seat": "First Class",
+    "airlines": [
+      "American Airlines",
+      "Breeze Airways",
+      "United Airlines"
+    ],
+    "avoid_airlines": [
+      "Delta Airlines"
+    ]
+  },
+  "destinations": {
+    "wishlist": [
+      "Riviera Maya",
+      "Isla Mujeres",
+      "Pacific Coast Mexico"
+    ],
+    "no_go": [
+      "Punta Cana"
+    ]
+  },
+  "feedback": {
+    "notes": [
+      "Breeze has CHS–CUN Saturday directs in 2026.",
+      "We prefer adults-only or adult-preferred resorts.",
+      "Food and spa experiences are top priorities."
+    ]
+  }
+}

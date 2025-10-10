@@ -7,11 +7,9 @@
     ],
     "scrolls": [
       "identity.txt",
-      "herald.txt",
-      "forge.txt",
-      "veil_from_harold_flame.txt"
-    ],
-  "ledgers": [
-    "ledger.txt",
-  ]
+      "persona/herald.txt",
+      "operational/forge.txt",
+      "experimental/veil_from_harold_flame.txt",
+      "ledger/ledger.txt"
+    ]
 }

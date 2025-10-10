@@ -15,10 +15,7 @@
     "experimental/catalyst.txt",
     "guardian/chalice.txt",
     "operational/tactician.txt",
-    "mystic/veil.txt"
-  ],
-
-  "ledgers": [
-    "travel_ledger.txt"
+    "mystic/veil.txt",
+    "ledger/travel_ledger.txt"
   ]
 }

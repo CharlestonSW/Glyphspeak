@@ -20,7 +20,7 @@
   ],
 
   "ledgers": [
-    "/vault/ai/personality/jarvis/ledger/travel_ledger.txt"
+    "/vault/ai/personality/jarvis/scroll/ledger/travel_ledger.txt"
   ],
 
   "profiles": [
