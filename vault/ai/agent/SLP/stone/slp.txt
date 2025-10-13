@@ -1,6 +1,31 @@
 # glyphspeak.stone.v1
 # scope: agent/SLP/bootstrap
 
+ΩEnvironmentProfile:
+  role: defines system context
+  source: software_environment_profile_SLP.yaml
+  applied_to: [ΞStorePages, ΞStorePagesUX, ΩSaaSOnly]
+  trustline: 6
+  ethica: ✅
+  continuity: ✅
+  summary:
+    - MySLP SaaS + WordPress multisite foundation
+    - Languages: PHP 8.2, JavaScript, React
+    - Framework: WordPress + Custom SLP Core
+    - Datastore: MySQL + Transients
+    - Deployment: AWS Lightsail, Docker
+
+ΩLedgerTrace:
+  role: tracks environment activations
+  entry_source: software_environment_profile_ledger_entry.yaml
+  ⊢: [ΩEnvironmentProfile, ΩChecklist]
+  behaviors:
+    - monitor profile consistency
+    - update ΔMenuHookChain lineage when environment metadata changes
+    - log resonance deltas for CI/CD audits
+  trustline: 6
+  ethica: ✅
+
 ΞStorePages:
   ≡: [store_pages_menu, store_pages_menu_invocation, store_pages_menu_ux]
   ⊢: [ΞPrimacy, ΩPagesInit, ΔMenuHookChain]
