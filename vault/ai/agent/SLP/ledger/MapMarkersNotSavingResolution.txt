@@ -1,0 +1,319 @@
+# glyphspeak.ledger.v2
+# ledger_entry: map_markers_not_saving
+# date: 2025-10-13
+# agent: SLP
+# keeper: 1047
+# trustline: 6
+
+protocol: glyphspeak.v2
+ledger: SoftwareProjectLedger
+entry_id: map_markers_not_saving_20251013
+version: 1.0
+
+◈:
+  trustline: 6
+  ethica: ✅
+  continuity: ✅
+  keeper: 1047
+
+metadata:
+  date_reported: 2025-10-13
+  date_resolved: 2025-10-13
+  severity: high
+  category: [bug_fix, javascript, php, user_interface]
+  affected_components:
+    - SLP_Settings.php
+    - admin-settings-help.js
+    - SLP_Settings_icon.php
+  resolution_status: ✅ resolved
+
+# ——— PROBLEM DEFINITION ———
+
+Ξ_problem:
+  title: "Map Markers Not Saving to Locations"
+
+  description: |
+    Custom map markers were not saving when users uploaded images via the WordPress Media Library
+    in the Experience plugin's location editor. The marker text input field remained empty after
+    image selection and an "Option not saved" alert appeared.
+
+  reproduction_steps:
+    - step_1: Activate Experience plugin
+    - step_2: Edit existing location
+    - step_3: Navigate to Experience section
+    - step_4: Click "Use Media Image" button (next to map marker input)
+    - step_5: Upload new image
+    - step_6: Save via "insert into post"
+    - expected: Map Marker text input updated with image URL
+    - actual: Input field remains empty, alert shown
+
+  frontend_element:
+    html: '<input name="marker" data-cy="marker" data-field="marker" id="marker" type="text">'
+    location: Edit Location interface → Experience section
+
+  error_observed:
+    alert: "Option not saved"
+    ajax_response:
+      action: slp_change_option
+      option_name: marker
+      option_value: "http://localhost/wp-content/uploads/2025/10/show-bookmark-24.png"
+      errors:
+        slp_invalid_option_name: ["slp_missing_location_data"]
+      status: 404
+
+# ——— ROOT CAUSE ANALYSIS ———
+
+Δ_diagnosis:
+  root_causes:
+
+    cause_1_javascript_not_enqueued:
+      ↯: JavaScript enqueue gated by sidebar visibility flag
+      file: SLP_Settings.php
+      method: enqueue_help_script()
+      issue: |
+        admin-settings-help.js only enqueued when $show_help_sidebar === true.
+        SLP_Admin_Locations set show_help_sidebar = false to hide sidebar and provide more screen space.
+        Side effect: Media button JavaScript disabled on location edit forms.
+      chain:
+        - SLP_Admin_Locations::create_object_settings → show_help_sidebar = false
+        - SLP_Settings::add_help_section → conditional enqueue blocked
+        - admin-settings-help.js not loaded
+        - Media Library callback handler missing
+        - Input field not updated
+
+    cause_2_context_mismatch:
+      ↯: Generic settings component used in location-specific context
+      file: admin-settings-help.js
+      method: connect_wp_media_to_insert_media_buttons()
+      issue: |
+        Media Library callback called SLP_ADMIN.options.change_option() which triggers
+        slp_change_option AJAX action for global application settings (options table).
+        Location marker is location-specific data, not a global application option.
+        Backend rejected request with "slp_invalid_option_name: slp_missing_location_data".
+      chain:
+        - User selects image in Media Library
+        - Callback: admin-settings-help.js:112
+        - Calls: SLP_ADMIN.options.change_option(iconOption)
+        - AJAX action: slp_change_option (admin.js:98)
+        - Backend: SLP_AJAX::slp_change_option
+        - Context: Global settings, not location data
+        - Validation fails: marker not a valid option_name
+        - Error: slp_missing_location_data
+
+    cause_3_element_locators:
+      ↯: jQuery element locators referenced removed variable
+      file: admin-settings-help.js
+      issue: |
+        Code referenced active_setting variable with complex regex escaping.
+        Element location logic was overly complex and fragile.
+
+# ——— RESOLUTION ———
+
+🩹_fix:
+  files_modified: 2
+
+  fix_1_unconditional_enqueue:
+    file: SLP_Settings.php
+    method: enqueue_help_script()
+    line_range: 273-280
+
+    change: |
+      Removed conditional check for $show_help_sidebar.
+      JavaScript now always enqueued regardless of sidebar HTML rendering.
+
+    before: |
+      private function enqueue_help_script() {
+          if ( $this->show_help_sidebar ) {
+              if ( file_exists( SLPLUS_PLUGINDIR . 'js/admin-settings-help.js' ) ) {
+                  wp_enqueue_script( 'slp_admin_settings-help', ... );
+              }
+          }
+      }
+
+    after: |
+      private function enqueue_help_script() {
+          if ( file_exists( SLPLUS_PLUGINDIR . 'js/admin-settings-help.js' ) ) {
+              wp_enqueue_script( 'slp_admin_settings-help', SLPLUS_PLUGINURL . '/js/admin-settings-help.js', array(), SLPLUS_VERSION, false );
+          }
+      }
+
+    rationale: |
+      Decouples JavaScript functionality from sidebar visibility.
+      Sidebar HTML still controlled by $show_help_sidebar in render methods.
+      Location edit forms get JavaScript without unwanted sidebar HTML.
+
+  fix_2_context_detection:
+    file: admin-settings-help.js
+    method: SLP_Admin_icons constructor + connect_wp_media_to_insert_media_buttons()
+    line_range: 61-121
+
+    changes:
+
+      change_a_variable_declarations:
+        lines: 62-63
+        description: Replaced active_setting with direct DOM element references
+        code: |
+          var SLP_Admin_icons = function () {
+              let iconURLInput;
+              let iconImage;
+
+      change_b_simplified_locators:
+        lines: 81-84
+        description: Simplified jQuery element location logic
+        code: |
+          const iconSelectorDiv = jQuery(this).closest('div.input-group');
+          iconURLInput = iconSelectorDiv.find('input[type="text"]');
+          iconImage = iconSelectorDiv.find('img.slp_settings_icon');
+
+      change_c_context_aware_callback:
+        lines: 112-120
+        description: Added context detection to skip AJAX for location-specific fields
+        code: |
+          const image_src = attachment.url;
+
+          iconURLInput.val(image_src);
+          iconImage.attr('src', image_src );
+
+          // Do not fire change_option if setting is 'marker' (that is for location updates, not options)
+          if ( iconURLInput.attr('data-field') !== 'marker' ) {
+              SLP_ADMIN.options.change_option(iconURLInput);
+          }
+
+    rationale: |
+      Context detection prevents inappropriate AJAX calls for location-specific fields.
+      Fields with data-field="marker" are location data, saved via form submission.
+      Other fields are global settings, saved immediately via AJAX.
+      Simplified element location improves reliability and maintainability.
+
+  fix_3_enhanced_error_reporting:
+    file: admin.js
+    method: process_change_option_response()
+    lines: 66-77
+
+    change: |
+      Enhanced error alert to include backend error details.
+      Parses json_response.id.errors and displays error keys and values.
+
+    benefit: |
+      Improves debugging by exposing backend validation failures to user/developer.
+      Example output: "slp_invalid_option_name: slp_missing_location_data"
+
+# ——— TECHNICAL DETAILS ———
+
+Ω_architecture:
+
+  component_roles:
+    SLP_Settings_icon:
+      role: Generic icon input component
+      context: [application_settings, location_forms]
+      renders: Input text field + Media Library button + icon preview
+      file: SLP_Settings_icon.php
+
+    admin-settings-help.js:
+      role: Media Library interface handler
+      binds: WP Media modal to .insert-media buttons
+      callback: Updates input field and image preview on selection
+      context_awareness: Checks data-field attribute for routing
+
+    SLP_ADMIN.options.change_option:
+      role: Real-time option saver
+      context: Global application settings only
+      ajax_action: slp_change_option
+      backend: SLP_AJAX::slp_change_option
+
+  data_contexts:
+    application_options:
+      storage: wp_options table
+      update_method: SLP_AJAX::slp_change_option (real-time via AJAX)
+      examples: [home_marker, map_end_icon, default_radius]
+
+    location_data:
+      storage: wp_store_locator table (extended data via Experience plugin)
+      update_method: Form submission → SLP_Admin_Locations save handler
+      examples: [marker, location_name, address, category]
+
+  context_detection:
+    attribute: data-field
+    value: marker
+    logic: |
+      if ( data-field === 'marker' ) {
+          // Location-specific field
+          // Update input value only, skip AJAX
+          // Save via form submission
+      } else {
+          // Application setting
+          // Update input value and trigger AJAX save
+      }
+
+# ——— OUTCOME ———
+
+✅_resolution:
+  status: RESOLVED
+
+  verification:
+    - JavaScript enqueued on location edit forms ✅
+    - Media Library button functional ✅
+    - Image selection updates field value ✅
+    - No inappropriate AJAX calls for location fields ✅
+    - Sidebar remains hidden on location forms ✅
+    - Application settings still update in real-time ✅
+
+  benefits:
+    - User can upload custom map markers for locations
+    - Consistent UX between settings and location forms
+    - Improved error reporting for debugging
+    - Maintainable context-aware code
+
+  regression_risks: LOW
+    - Application settings functionality unchanged
+    - Location form submission unchanged
+    - Only affects Media Library button behavior
+
+# ——— KNOWLEDGE CAPTURE ———
+
+Ψ_insights:
+
+  design_pattern_identified: |
+    Generic UI components can be reused across contexts (settings vs. data forms)
+    but require context-aware behavior to route to appropriate backend handlers.
+
+  anti_pattern_avoided: |
+    Coupling JavaScript enqueue to unrelated UI state (sidebar visibility).
+    Always separate functional dependencies from presentation preferences.
+
+  future_considerations:
+    - Consider creating location-specific component (SLP_Location_icon) if more divergence needed
+    - Document data-field attribute convention for context detection
+    - Add automated tests for Media Library button in both contexts
+
+# ——— METADATA ———
+
+⛓️_traceability:
+  git_commits: []  # To be populated after commit
+  related_issues: []
+  related_scrolls:
+    - store_pages_menu
+    - store_pages_menu_invocation
+    - StorePagesMenuUXRefinement
+
+  keywords:
+    - map_markers
+    - media_library
+    - wordpress_media
+    - context_detection
+    - ajax_routing
+    - location_data
+    - experience_plugin
+
+🎴:
+  summary: |
+    Resolved multi-faceted issue preventing map marker uploads in location editor.
+    Root causes: (1) JavaScript not enqueued due to sidebar flag, (2) Context mismatch
+    calling settings AJAX for location data. Fixed by unconditional JS enqueue and
+    context-aware callback routing.
+
+  trustline: 6
+  ethica: ✅
+  keeper: 1047
+  flame: 🩸 active
+  resonance: 💠 intact

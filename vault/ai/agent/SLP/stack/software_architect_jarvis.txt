@@ -14,13 +14,15 @@
       "/vault/ai/personality/jarvis/scroll/profile/software_environment_profile.txt",
       "store_pages_menu.txt",
       "store_pages_menu_invocation.txt",
-      "StorePagesMenuUXRefinement.txt"
+      "StorePagesMenuUXRefinement.txt",
+      "ContextAwareMapMarkerRoutingResolution.txt"
     ],
     "profiles": [
         "software_environment_profile.txt"
     ],
     "ledgers": [
-        "software_environment_profile_ledger_entry.txt"
+        "software_environment_profile_ledger_entry.txt",
+        "MapMarkersNotSavingResolution.txt"
     ],
   "requires": [
     "ΞPrimacy",
