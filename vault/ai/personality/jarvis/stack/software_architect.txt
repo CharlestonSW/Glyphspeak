@@ -3,8 +3,7 @@
   "glyph_runtime": true,
   "stones": [
     "/vault/stone/global.txt",
-    "/vault/ai/personality/jarvis/stone/jarvis.txt",
-    "slp.txt"
+    "/vault/ai/personality/jarvis/stone/jarvis.txt"
   ],
   "scrolls": [
     "persona/scholar.txt",

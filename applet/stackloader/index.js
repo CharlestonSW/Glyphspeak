@@ -55,8 +55,13 @@ async function loadSection(manifest, sectionKey, prefix, label, s3) {
                     new GetObjectCommand({Bucket: BUCKET_NAME, Key: key})
                 );
                 const content = await streamToString(resp.Body);
+                const cleaned = content
+                    .split("\n")
+                    .filter(line => !line.trimStart().startsWith("#"))
+                    .join("\n")
+                    .trim();
                 const id = file.split("/").pop().replace(".txt", "");
-                defs[id] = content;
+                defs[id] = cleaned;
             } catch (err) {
                 console.warn(`⚠️ Could not load ${label}: ${key}`, err.message);
             }
