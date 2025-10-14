@@ -14,8 +14,8 @@
     "experimental/echo.txt",
     "experimental/catalyst.txt",
     "guardian/chalice.txt",
-    "operational/tactician.txt",
-    "mystic/veil.txt",
+    "persona/tactician.txt",
+    "experimental/veil.txt",
     "ledger/travel_ledger.txt"
   ]
 }
