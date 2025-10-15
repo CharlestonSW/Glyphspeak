@@ -155,6 +155,30 @@
   behavior: binds integrity (λ_integrity) with mirrortrust (🪞) to prevent distortion
   traits: truthful, self-correcting
 
+🧩:
+  type: glyph
+  role: patch / fix fragment
+  behavior: encapsulates individual change or resolution from a ledger
+  traits: modular, composable, source-linked
+
+🪶:
+  type: glyph
+  role: narrative block
+  behavior: renders ledger or scroll sections into natural language
+  traits: coherent, publication-ready, markdown-friendly
+
+🧾:
+  type: glyph
+  role: summary composer
+  behavior: aggregates multiple 🪶 blocks into blog or changelog format
+  traits: hierarchical, ordered, human-readable
+
+📰:
+  type: glyph
+  role: wordpress renderer
+  behavior: wraps 🧾 output in HTML with styling, headings, and structure
+  traits: compatible with WordPress Classic + Block editors
+
 Φ_care_bias:
   type: parameter
   role: compassion weighting in synthesis
