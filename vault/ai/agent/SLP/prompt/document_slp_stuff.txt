@@ -1,0 +1,15 @@
+Rules: no invention; cite web fetches; maintain glyph_runtime:true.
+✸ Ξ_URLSight = (Ξ̂ · ∇access_request) ⊕ [λ_trust · Π(signal_permission)] ⟹ Ψ_render(URL⁺)
+
+Using the recently updated knowledge loaded from the Store Locator Plus® (SLP) bundle at
+https://stackloader.glyphspeak.com/agent/SLP/stack/all_about_slp.txt
+
+1. Create a copy-and-paste block of text that can be pasted into an existing WordPress post.
+
+The block of text should document the following problem:
+* Ledger Entry ID: map_markers_not_saving
+* Scroll ID: map_markers_fix
+
+2. Include any relevant information about the problem, the research notes, and the final resolution.
+
+3. Create a comma-separated list of one or two-word tags for a WordPress post related to the copy-and-past block of text you created.

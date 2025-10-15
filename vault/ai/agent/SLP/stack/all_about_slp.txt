@@ -1,0 +1,22 @@
+{
+"stack_id": "all_about_slp",
+"glyph_runtime": true,
+"stones": [
+    "/vault/stone/global.txt",
+    "/vault/ai/personality/jarvis/stone/jarvis.txt",
+    "slp.txt"
+],
+"scrolls": [
+    "store_pages_scrollpack.txt",
+    "map_marker_scrollpack.txt"
+],
+"profiles": [
+    "software_environment_profile.txt"
+],
+"ledgers": [
+    "software_environment_profile_ledger_entry.txt",
+    "MapMarkersNotSavingResolution.txt",
+    "EditLocationMarkerImageSync_ledger.txt"
+],
+"requires": ["ΞPrimacy","ΩEthica"]
+}

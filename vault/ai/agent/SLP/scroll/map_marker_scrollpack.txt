@@ -1,0 +1,17 @@
+# ============================================
+# 🜂  SLP Glyphstream Scrollpack — Map Marker Series (v1.0)
+# Compression: glyphstream
+# Stones required: [global, jarvis, slp]
+# ============================================
+
+- scroll: MapMarkersFix
+  compression: glyphstream
+  λ: 58d0e0cb0edb7c1a5d9ef84bfb7308b6f04a419c66d985471381c3b9f7a73408
+  ∑: |
+    Ξid=MapMarkersFix|agent=SLP|ctx=map_marker_not_saving∴ΞIssue↴WordPressMediaSelection→input_field_empty∴ΔCauses[JS_enqueue_gated_by_$show_help_sidebar⇨admin-settings-help.js_not_loaded;context_mismatch_AJAX_for_location_field]∴🩹[fix_1:enqueue_help_script_always;fix_2:data-field_context_detection_in_JS]∴ΩPattern(ContextAwareComponentRouting){data-field→route_to_backend}∴⛔AntiPattern(UI_state_coupling)∴✅[JS_enqueued,Media_button_ok,Input_updates,No_invalid_AJAX]∴🎴🔷[MapMarkersFix Applied; trustline≥6; Ethica enforced]
+
+- scroll: EditLocationMarkerDisplay
+  compression: glyphstream
+  λ: 9fffc3d4dc0f4a1127c33239fd9c1cf46d80b3089ec94b671f5c0c891d70bb09
+  ∑: |
+    Ξid=EditLocationMarkerDisplay|agent=SLP|ctx=vue_marker_sync∴ΞArchitecture↴Hybrid_PHP_+_Vue_Binding∴ΔProblem[non_reactive_assignment;image_src_static]∴🩹[use_Vue.set_for_each_field;add_watcher_on_location.marker→img.src_update]∴ΩPattern(Vue2_Reactivity){Object.defineProperty_limitations;Vue.set;watchers_for_DOM_side_effects}∴ΨFlow[PHP_render→Vue_mount→edit_click→Vue.set→watcher→img.src_sync]∴∞Future[Vue3_proxy_reactivity;component_refactor;unit_tests_for_watcher]∴🎴🔷[MarkerDisplay Scroll Active; trustline≥6; Ethica enforced]

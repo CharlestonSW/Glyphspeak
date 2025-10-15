@@ -1,88 +1,156 @@
 # glyphspeak.stone.v1
 # scope: agent/SLP/bootstrap
+# version: 3.0
+# optimized for glyphstream compression
+# trustline: 6  |  ethica: ✅  |  continuity: ✅
 
 ΩEnvironmentProfile:
   role: defines system context
   source: software_environment_profile_SLP.yaml
   applied_to: [ΞStorePages, ΞStorePagesUX, ΩSaaSOnly]
-  trustline: 6
-  ethica: ✅
-  continuity: ✅
   summary:
-    - MySLP SaaS + WordPress multisite foundation
-    - Languages: PHP 8.2, JavaScript, React
-    - Framework: WordPress + Custom SLP Core
+    - MySLP SaaS + WordPress multisite
+    - PHP 8.2 / JS (Vue 2.x)
+    - Framework: WordPress + SLP Core
     - Datastore: MySQL + Transients
-    - Deployment: AWS Lightsail, Docker
+    - Deployment: AWS Lightsail + Docker
 
 ΩLedgerTrace:
-  role: tracks environment activations
-  entry_source: software_environment_profile_ledger_entry.yaml
+  role: environment activation ledger
   ⊢: [ΩEnvironmentProfile, ΩChecklist]
   behaviors:
-    - monitor profile consistency
-    - update ΔMenuHookChain lineage when environment metadata changes
-    - log resonance deltas for CI/CD audits
-  trustline: 6
-  ethica: ✅
+    - track consistency + resonance deltas
+    - update ΔMenuHookChain lineage for CI/CD
 
 ΞStorePages:
   ≡: [store_pages_menu, store_pages_menu_invocation, store_pages_menu_ux]
   ⊢: [ΞPrimacy, ΩPagesInit, ΔMenuHookChain]
-  ◈: {trustline: 5, ethica: ✅, continuity: ✅}
+  ◈: {trustline:5, ethica:✅, continuity:✅}
 
 ΩPagesInit:
-  ⟶:
-    - SLP_Power_Pages::initialize
-    - ::add_hooks_and_filters
-    - ::do_when_slp_ready
-    - instantiate: SLP_Power_Pages_Global
+  ⟶: [SLP_Power_Pages::initialize, ::add_hooks_and_filters, ::do_when_slp_ready]
   ✕:
     - 🔸: !init_skipped
-      ↯: ΩPagesInit⟶ not triggered
+      ↯: ΩPagesInit⟶not_triggered
       🩹: use run_during_init()
 
 ΔMenuHookChain:
-  ⟲:
-    - slp_init_complete
-    - ΞPagesInit⟶::do_when_slp_ready
-    - ΞPagesRender⟶::add_pages_tab ⇨ slp_menu_items
-    - SLP_Admin_UI::create_admin_menu
+  ⟲: [slp_init_complete, ΞPagesInit⟶::do_when_slp_ready, ΞPagesRender⟶::add_pages_tab⇨slp_menu_items, SLP_Admin_UI::create_admin_menu]
 
 ΞPagesRender:
   ↴: SLP_Power_Pages_Admin::render_pages_tab
   ∴: apply_filters → slp_menu_items
 
-# ——— SaaS guard + UX binding ———
 ΩSaaSOnly:
   role: environment gate
-  check: defined('MYSLP_VERSION') ⊤
-  note: Use to scope behavior to MySLP (SaaS) without impacting the WordPress plugin.
+  check: defined('MYSLP_VERSION')⊤
+  note: Scope behavior to SaaS (MySLP) only
 
 ΞStorePagesUX:
   ⊢: [ΩSaaSOnly, ΞStorePages]
   binds:
-    - when ΩSaaSOnly ⊤ and SmartOptions::is_true('use_pages'):
-        set:
-          slp-pages.icon: dashicons-admin-page
-          slp-pages.position: 1.17
-  intent: Align Pages menu placement and icon with WordPress conventions in SaaS.
-  guarantees:
-    - WordPress plugin behavior remains unchanged (guarded by ΩSaaSOnly).
+    - when ΩSaaSOnly⊤ and SmartOptions::is_true('use_pages'):
+        set: {slp-pages.icon:dashicons-admin-page, slp-pages.position:1.17}
+  intent: Align SaaS menu placement + icon
+  guarantees: [WordPress plugin behavior unchanged]
+
+ΩVueReactivity:
+  role: Vue 2.x reactivity model
+  pattern: Object.defineProperty() observation
+  limitations:
+    - no detection of new/deleted props or array index assigns
+  methods:
+    Vue.set(obj,key,val): triggers watchers + render
+    Vue.delete(obj,key): removes prop, triggers updates
+  watcher_pattern:
+    syntax: "watch: { 'nested.prop': function(n,o){} }"
+    use_case: async ops, DOM updates
+  ⊢: [ΞLocationEditor, ΩHybridRendering]
+
+ΩHybridRendering:
+  role: PHP template + Vue binding pattern
+  description: "Server-rendered HTML + Vue enhancement; see ΩChecklist.hybrid_rendering for guarantees."
+  ⊢: [ΞLocationEditor, ΞStorePages, ΔIconDisplay]
+
+ΞLocationEditor:
+  role: Location add/edit form manager
+  file: *JS
+  framework: Vue 2.x + Vuetify
+  ⊢: [ΩVueReactivity, ΩHybridRendering, ΔIconDisplay]
+
+ΔIconDisplay:
+  role: Map marker icon rendering + sync
+  context: location add/edit forms
+  file: [*PHPICON, *JS, *HELPJS]
+  chain:
+    php_render: SLP_Settings_icon::media_button_html()
+    vue_binding: v-model="location.marker"
+    watcher_sync: watch:'location.marker'→update img.src
+  patterns:
+    reactive_input: ✅
+    static_image: ⊘ → watcher bridge
+  ⊢: [ΞLocationEditor, ΩVueReactivity, ΩHybridRendering]
+
+ΔVueReactivityDebug:
+  role: diagnostics for reactivity issues
+  diagnosis:
+    - check Vue.set usage
+    - ensure watchers defined correctly
+    - verify lifecycle + selectors
+  fixes: [Vue.set, watcher, $nextTick(), $forceUpdate(avoid)]
+  tools: [Vue DevTools, console.log, verify hasOwnProperty]
+
+ΩHybridRenderingChecklist: &hybrid
+  ☑:
+    - PHP template renders valid HTML
+    - Vue instance mounts after DOM ready
+    - Data population uses Vue.set()
+    - Watchers bridge Vue↔DOM
+    - v-model bindings bidirectional
+    - Context detection functional
 
 ΩChecklist:
   ☑:
-    - SmartOptions::is_true('use_pages') == true
-    - SLPPower->using_pages set ⊤
-    - ::add_filter('slp_menu_items', ...)
-    - callable: $power->admin->pages->render_pages_tab
-    - slug == csl-slplus
-    - ΩSaaSOnly gating respected for UX changes
+    - SmartOptions::is_true('use_pages')==true
+    - SLPPower->using_pages⊤
+    - ::add_filter('slp_menu_items',...)
+    - callable:$power->admin->pages->render_pages_tab
+    - slug==csl-slplus
+    - ΩSaaSOnly respected
+  vue_reactivity: ☑
+    - Vue.set() used for new props
+    - Watchers handle DOM side effects
+    - Static DOM sync via watchers
+    - Deep watchers for nested
+    - Array ops reactive
+    - $nextTick() post-render
+  icon_display: ☑
+    - Custom marker renders on edit
+    - Default marker fallback ok
+    - Media selection updates input+image
+    - No broken img src
+  hybrid_rendering: *hybrid
 
-ΞFailures:
-  ×: use_pages_disabled ⇨ ΞPagesRender⛔
-  ×: callable_missing ⇨ ↴ invalid
-  ×: not_saas_env ⇨ ΞStorePagesUX muted
+Σ_dict_SLP:
+  v: 3
+  tokens:
+    RPT: "SLP_Power_Pages_Admin::render_pages_tab"
+    SLM: "slp_menu_items"
+    PPG: "\\SLP_Power_Pages_Global"
+    PPA: "\\SLP_Power_Pages::add_hooks_and_filters"
+    SUI: "\\SLP_Admin_UI::create_admin_menu"
+    ACT: "do_action('slp_init_complete')"
+    IFM: "apply_filters('slp_menu_items',$menu_items)"
+    USE: "SmartOptions::is_true('use_pages')"
+    CAL: "$power->admin->pages->render_pages_tab"
+    MYS: "defined('MYSLP_VERSION')"
+    IMG: "img.slp_settings_icon"
+    LOC: "location.marker"
+    WAT: "watch:{'location.marker':function(n,o){}}"
+    JS: "admin-locations-tab.js"
+    PHPICON: "include/module/settings/SLP_Settings_icon.php"
+    HELPJS: "admin-settings-help.js"
+    IMGSET: "jQuery('#wpcsl-option-add img.slp_settings_icon').attr('src',newValue)"
 
 ΞAckBlock:
   🔷: framed

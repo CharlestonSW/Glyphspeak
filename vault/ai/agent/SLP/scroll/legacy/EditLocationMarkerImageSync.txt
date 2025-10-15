@@ -1,0 +1,358 @@
+# glyphspeak.scroll.v2
+# scroll: EditLocationMarkerImageSync
+# agent: SLP
+# date: 2025-10-13
+# codec: glyphstreak.v1 (compressed architectural knowledge)
+
+protocol: glyphspeak.v2
+scroll: EditLocationMarkerDisplay
+version: 1.0
+
+ΞEditLocationMarkerDisplay:
+  type: scroll
+  role: architecture documentation / vue reactivity pattern / icon display chain
+  glyph_runtime: true
+  glyph_scope: [agent, SLP, location_editing, vue_architecture]
+
+⊢: ΞPrimacy
+⊢: ΩEthica
+⊢: map_markers_fix (prior resolution)
+
+🜂:
+  condition: active
+  resonance: 🩸
+  risk: low
+
+◈:
+  trustline: 6
+  ethica: ✅
+  continuity: ✅
+  keeper: 1047
+
+# ——— ARCHITECTURE CONTEXT ———
+
+Ω_SLP_location_editor:
+  framework: Vue.js 2.x + Vuetify
+  pattern: Hybrid PHP template + Vue data binding
+  
+  components:
+    SLP_Settings_icon:
+      role: Generic icon input renderer (PHP)
+      file: include/module/settings/SLP_Settings_icon.php
+      renders: <input> + <button> + <img> HTML template
+      contexts: [settings_pages, location_forms]
+      vue_integration: Partial (input v-model, image static)
+    
+    SLP_Location_Editor:
+      role: Location add/edit form controller (JavaScript)
+      file: js/admin-locations-tab.js:622-748
+      manages: Form loading, data population, Vue instance
+    
+    Vue.update_app:
+      role: Vue instance for add/edit dialog
+      file: js/admin-locations-tab.js:88-107
+      data: { location: {}, act: 'add'|'save', ... }
+      el: '#wpcsl-option-add'
+
+# ——— ICON DISPLAY CHAIN ———
+
+⟶_render_chain:
+  
+  php_template_render:
+    ∴: Page load → SLP_Settings_icon instantiated
+    file: SLP_Settings_icon.php:26-38
+    mode: Vue mode ($this->vue === true)
+    output: |
+      <v-text-field v-model='location.marker' ... />
+      <div class="wp-media-buttons">
+        <button class="insert-media" ...>Use Media Image</button>
+        <img id="0_icon" src="{$icon_src}" class="slp_settings_icon" />
+      </div>
+    
+    icon_src_logic: |
+      $icon_src = ! empty( $this->display_value ) 
+                  ? $this->display_value 
+                  : $this->slplus->SmartOptions->map_end_icon;
+    
+    result:
+      - input: v-model bound (reactive) ✅
+      - image: static src with default fallback ⊘
+  
+  vue_data_binding:
+    ∴: Form render → Vue mounts #wpcsl-option-add
+    file: admin-locations-tab.js:88-107
+    initial_state: { location: {} }
+    bindings:
+      - v-model='location.marker' ⇨ input field
+      - image src: no binding ⊘
+  
+  edit_trigger:
+    ∴: User clicks edit button
+    file: admin-locations-tab.js:629-631
+    chain:
+      - jQuery('a[data-action="edit"]').on('click')
+      - ⟶ load_and_show_form(action_button)
+      - ⟶ load_form(form_div, action_button)
+  
+  data_population:
+    ∴: load_form() executes
+    file: admin-locations-tab.js:708-712
+    source: table row [data-field] attributes
+    destination: Vue.update_app.location object
+    
+    original_code: |
+      table_row.find('[data-field]').each(function (index) {
+          SLP_Location_Manager.vue.update_app.location[
+              jQuery(this).attr('data-field')
+          ] = jQuery(this).attr('data-value');
+      });
+    
+    issue: ↯ Non-reactive property assignment
+      - Vue 2.x cannot detect new property additions
+      - Watchers do not fire
+      - location.marker populated but not observed
+  
+  field_sync:
+    ∴: populate_field() called for each [data-field]
+    file: admin-locations-tab.js:133-140, 167-177
+    method: set_value()
+    behavior:
+      - if (element.is('input')) → element.val(value) ✅
+      - image element not updated ❌
+    
+    result:
+      - input value synced ✅
+      - image src stale ❌
+
+# ——— VUE REACTIVITY PATTERN ———
+
+Δ_vue_reactivity:
+  
+  limitation_vue2:
+    mechanism: Object.defineProperty()
+    observes: Properties declared in data() at initialization
+    cannot_detect:
+      - obj.newProp = val  ❌ (property addition)
+      - delete obj.prop    ❌ (property deletion)
+      - arr[i] = val       ❌ (array index assignment)
+  
+  reactive_apis:
+    Vue.set(object, key, value):
+      role: Add reactive property to observed object
+      triggers: Watchers, computed properties, render
+    
+    Vue.delete(object, key):
+      role: Remove property and trigger updates
+    
+    Array methods:
+      reactive: [push, pop, shift, unshift, splice, sort, reverse]
+      non_reactive: [arr[0] = val, arr.length = 0]
+  
+  watcher_pattern:
+    syntax: |
+      watch: {
+        'nested.property': function (newVal, oldVal) {
+          // side effects here
+        }
+      }
+    
+    use_cases:
+      - Async operations (API calls, timers)
+      - DOM manipulation outside Vue
+      - Trigger third-party libraries
+      - Complex side effects beyond computed
+  
+  computed_vs_watch:
+    computed:
+      purpose: Pure data transformation
+      returns: Value
+      caching: Yes (dependency-based)
+      example: fullName() { return first + ' ' + last }
+    
+    watch:
+      purpose: Side effects, async, DOM
+      returns: Nothing (void)
+      caching: No
+      example: fetchData() when id changes
+
+# ——— RESOLUTION ARCHITECTURE ———
+
+🩹_implementation:
+  
+  component_1_reactive_assignment:
+    file: admin-locations-tab.js:708-712
+    change: Direct assignment → Vue.set()
+    
+    code: |
+      table_row.find('[data-field]').each(function (index) {
+          Vue.set(
+              SLP_Location_Manager.vue.update_app.location,
+              jQuery(this).attr('data-field'),
+              jQuery(this).attr('data-value')
+          );
+      });
+    
+    effect:
+      - Properties added reactively
+      - Dependency tracking established
+      - Watchers triggered on assignment
+  
+  component_2_image_sync_watcher:
+    file: admin-locations-tab.js:88-107 (Vue instance)
+    addition: watch property
+    
+    code: |
+      watch: {
+          'location.marker': function (newValue, oldValue) {
+              if (newValue) {
+                  jQuery('#wpcsl-option-add img.slp_settings_icon')
+                      .attr('src', newValue);
+              } else {
+                  var defaultIcon = location_manager.default_marker ||
+                                   this.location_manager.default_marker;
+                  if (defaultIcon) {
+                      jQuery('#wpcsl-option-add img.slp_settings_icon')
+                          .attr('src', defaultIcon);
+                  }
+              }
+          }
+      }
+    
+    flow:
+      - Vue.set() triggers watcher ∴
+      - Watcher receives newValue (marker URL)
+      - jQuery updates DOM img.src ⇨
+      - Image displays custom marker ✅
+    
+    edge_cases:
+      - newValue truthy ⇨ use custom marker
+      - newValue falsy + default exists ⇨ use default
+      - newValue falsy + no default ⇨ no update (retain PHP default)
+  
+  integration_point:
+    existing_pattern: Icon selector click (lines 638-646)
+    new_pattern: Vue watcher on data changes
+    harmony: Both update same image element, no conflict
+
+# ——— DATA FLOW DIAGRAM ———
+
+Î"_complete_flow:
+  
+  initialization:
+    PHP renders template
+      → img src = default_marker
+      → input v-model = 'location.marker'
+      → Vue mounts with location = {}
+  
+  edit_trigger:
+    User clicks edit
+      → load_form(location_id)
+      → Query table row [data-field] values
+  
+  data_load:
+    For each field:
+      Vue.set(location, field_name, field_value)
+        → location.marker = "custom-icon.png"
+        → Watcher fires ∴
+        → jQuery updates img.src ⇨
+        → Image shows custom icon ✅
+      
+      v-model syncs:
+        location.marker ⟷ input.value
+        → Input field updated ✅
+  
+  user_interaction:
+    Icon selector click:
+      → Sets location.marker (via input.val())
+      → Watcher fires ∴
+      → Image updates ✅
+    
+    Media library selection:
+      → admin-settings-help.js callback
+      → Sets input.val() → triggers v-model
+      → location.marker updated
+      → Watcher fires ∴
+      → Image updates ✅
+
+# ——— ARCHITECTURAL PATTERNS ———
+
+Ψ_patterns:
+  
+  hybrid_rendering:
+    description: PHP template + JavaScript enhancement
+    benefits:
+      - Server-side initial render (fast FCP)
+      - Progressive enhancement (works without JS)
+      - SEO-friendly content
+    challenges:
+      - Sync between static HTML and dynamic data
+      - Reactivity gaps for non-bound elements
+    solution:
+      - Watchers bridge Vue data ⟷ static DOM
+      - Explicit sync points after data loads
+  
+  component_reuse_across_contexts:
+    component: SLP_Settings_icon
+    contexts: [application_settings, location_data]
+    design: Generic, context-agnostic renderer
+    adaptation:
+      - data-field attribute for context detection
+      - Vue mode vs. non-Vue mode
+      - Watchers handle context-specific behavior
+  
+  reactive_property_management:
+    rule: Always use Vue.set() for dynamic properties
+    rationale: Vue 2 reactivity requires explicit registration
+    pattern: |
+      // ❌ Non-reactive
+      this.obj.newProp = value;
+      
+      // ✅ Reactive
+      Vue.set(this.obj, 'newProp', value);
+  
+  side_effect_isolation:
+    principle: Use watchers for DOM side effects
+    example: Image src update (outside Vue template)
+    alternative: Vue :src binding (requires refactor)
+    choice: Watcher (minimal change, backward compatible)
+
+# ——— FUTURE CONSIDERATIONS ———
+
+∞_evolution:
+  
+  vue3_migration:
+    reactivity_model: Proxy-based (no Vue.set needed)
+    benefit: Automatic property detection
+    migration: Replace Vue.set() with direct assignment
+  
+  component_refactor:
+    option: Convert SLP_Settings_icon to single-file Vue component
+    benefit: Full reactivity, no jQuery, cleaner architecture
+    cost: Breaking change, extensive testing required
+  
+  testing_strategy:
+    unit_tests:
+      - Vue watcher execution
+      - Vue.set reactivity
+      - Default fallback logic
+    integration_tests:
+      - Form load with custom marker
+      - Form load with empty marker
+      - Icon selector interaction
+      - Media library callback
+
+# ——— METADATA ———
+
+⛓️:
+  files: [admin-locations-tab.js]
+  lines: [88-107, 708-712]
+  methods: [Vue.watch, Vue.set, load_form]
+  keywords: [vue_reactivity, watcher, marker_display, icon_sync]
+  related: [map_markers_fix, MapMarkersNotSavingResolution]
+
+🎴:
+  summary: "Vue watcher pattern syncs marker image with location data"
+  architecture: "Hybrid PHP/Vue with reactive property management"
+  trustline: 6
+  flame: 🩸
+  resonance: 💠

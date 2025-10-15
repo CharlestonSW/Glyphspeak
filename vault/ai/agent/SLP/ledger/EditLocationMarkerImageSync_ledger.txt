@@ -1,0 +1,342 @@
+# glyphspeak.ledger.v2
+# ledger_entry: EditLocationMarkerImageSync_ledger
+# date: 2025-10-13
+# agent: SLP
+# keeper: 1047
+# trustline: 6
+
+protocol: glyphspeak.v2
+ledger: SoftwareProjectLedger
+entry_id: editing_location_shows_default_marker_20251013
+version: 1.0
+
+◈:
+  trustline: 6
+  ethica: ✅
+  continuity: ✅
+  keeper: 1047
+
+metadata:
+  date_reported: 2025-10-13
+  date_resolved: 2025-10-13
+  severity: medium
+  category: [bug_fix, vue_reactivity, ui_display, icon_rendering]
+  affected_components:
+    - admin-locations-tab.js
+  resolution_status: ✅ resolved
+  related_to: map_markers_not_saving_20251013
+
+# ——— PROBLEM DEFINITION ———
+
+Ξ_problem:
+  title: "Editing Location Shows Default Map Marker Instead of Custom Marker"
+
+  description: |
+    When editing a pre-existing location with a custom map marker, the edit form displays
+    the default SLP map marker icon (bulb_azure.png) instead of the location's custom marker.
+    The input text field contains the correct custom marker URL, but the preview image does
+    not sync with the input value.
+
+  reproduction_steps:
+    - step_1: Login as admin
+    - step_2: Navigate to SLP | Locations (wp-admin/admin.php?page=slp_manage_locations)
+    - step_3: Click edit button on location with custom marker (e.g., location #1)
+    - step_4: Edit form opens via Vue.js
+    - expected: Preview image shows custom marker (show-bookmark-24.png)
+    - actual: Preview image shows default marker (bulb_azure.png)
+
+  environment:
+    slp_version: 2510.13.01
+    experience_version: 2510.02.01
+    wordpress: 6.8.3
+    php: 8.3.1
+    mysql: 8.3.0
+
+  frontend_state:
+    input_field_value: "http://localhost/wp-content/uploads/2025/10/show-bookmark-24.png" ✅
+    image_src: "http://localhost/wp-content/plugins/store-locator-plus/images/icons/bulb_azure.png" ❌
+    vue_location_data: populated ✅
+    image_sync: broken ❌
+
+# ——— DIAGNOSIS PROCESS ———
+
+Δ_investigation:
+
+  step_1_initial_hypothesis:
+    theory: "PHP rendering issue in SLP_Settings_icon"
+    file: SLP_Settings_icon.php:48
+    finding: |
+      $icon_src = ! empty( $this->display_value ) ? $this->display_value : $this->slplus->SmartOptions->map_end_icon;
+    analysis: |
+      PHP renders static HTML template with default icon as fallback.
+      This is EXPECTED and CORRECT behavior for template rendering.
+      $this->display_value empty at render time → falls back to default.
+    conclusion: ⊘ Not root cause, working as designed
+
+  step_2_framework_detection:
+    discovery: Dual framework environment (Vue + React)
+    files:
+      - SLP_Settings_icon.php (Vue template rendering)
+      - myslp-dashboard Form.js (React component)
+    analysis: |
+      Edit form uses Vue.js (not React).
+      Vue template: v-model='location.marker' binds input field.
+      Image element: static HTML from PHP, not Vue-bound.
+    conclusion: Image src not reactive in Vue context
+
+  step_3_data_population_trace:
+    file: admin-locations-tab.js
+    entry_point: line 629 (edit button click)
+    chain:
+      - load_and_show_form() → line 662
+      - load_form() → line 680
+      - Populate Vue data → lines 708-712
+    code: |
+      table_row.find('[data-field]').each(function (index) {
+          SLP_Location_Manager.vue.update_app.location[
+              jQuery(this).attr('data-field')
+          ] = jQuery(this).attr('data-value');
+      });
+    finding: Vue location object populated with marker URL ✅
+
+  step_4_field_population_analysis:
+    method: populate_field() → line 133
+    method: set_value() → line 167
+    code: |
+      if (element.is('input')) {
+          element.val(value);  // ← Sets INPUT value only
+          return;
+      }
+    finding: |
+      Only updates input text field, NOT image element.
+      Image <img class="slp_settings_icon"> not touched.
+    conclusion: ↯ Root cause identified
+
+  step_5_icon_selector_comparison:
+    file: admin-locations-tab.js:638-646
+    code: |
+      jQuery('.slp_icon_selector').on('click', function () {
+          const image_src = jQuery(this).attr('src');
+          const input_div = jQuery(this).closest('div.input-group');
+          input_div.find('img.slp_settings_icon').attr('src', image_src); ← Updates image
+          iconOption.val(image_src);
+      });
+    finding: |
+      Icon selector correctly updates BOTH input and image.
+      But only fires on manual icon clicks, not during form load.
+    pattern: Shows correct approach for image sync
+
+# ——— ROOT CAUSE ———
+
+↯_root_cause:
+  issue: "Vue reactivity not established for image src attribute"
+  
+  technical_detail: |
+    PHP renders static HTML template with img.slp_settings_icon using default src.
+    Vue populates location.marker via direct property assignment (lines 708-712).
+    Input field updates via v-model='location.marker' (reactive binding).
+    Image src remains static - no Vue binding or manual sync exists.
+  
+  chain:
+    - PHP renders template → img src = default icon
+    - Vue loads location data → location.marker = custom icon
+    - v-model updates input field → input value = custom icon ✅
+    - Image src not updated → img src = default icon ❌
+  
+  why_no_reactivity: |
+    Image element rendered as plain HTML string, not Vue template with :src binding.
+    No Vue watcher monitoring location.marker changes.
+    No manual sync after data load.
+
+# ——— RESOLUTION ———
+
+🩹_solution:
+
+  approach: "Vue watcher + Vue.set() for reactive property assignment"
+  
+  fix_1_vue_watcher:
+    file: admin-locations-tab.js
+    location: Vue instance definition (lines 88-107)
+    
+    change: |
+      Added watch property to monitor location.marker changes and sync image src.
+    
+    code: |
+      watch: {
+          'location.marker': function (newValue, oldValue) {
+              console.log('Vue watch location.marker:', newValue);
+              
+              // If marker has a value, use it
+              if (newValue) {
+                  jQuery('#wpcsl-option-add img.slp_settings_icon').attr('src', newValue);
+              } else {
+                  // If marker is empty, fall back to default (if available)
+                  var defaultIcon = location_manager.default_marker ||
+                                   this.location_manager.default_marker;
+                  if (defaultIcon) {
+                      jQuery('#wpcsl-option-add img.slp_settings_icon').attr('src', defaultIcon);
+                  }
+              }
+          }
+      },
+    
+    rationale: |
+      Vue watcher triggers when location.marker changes (including during form load).
+      Updates image src to match current marker value.
+      Handles custom markers, empty markers, and default fallback.
+  
+  fix_2_reactive_property_assignment:
+    file: admin-locations-tab.js
+    location: load_form() method (lines 708-712)
+    
+    change: |
+      Replaced direct property assignment with Vue.set() to ensure reactivity.
+    
+    before: |
+      table_row.find('[data-field]').each(function (index) {
+          SLP_Location_Manager.vue.update_app.location[
+              jQuery(this).attr('data-field')
+          ] = jQuery(this).attr('data-value');
+      });
+    
+    after: |
+      table_row.find('[data-field]').each(function (index) {
+          Vue.set(
+              SLP_Location_Manager.vue.update_app.location,
+              jQuery(this).attr('data-field'),
+              jQuery(this).attr('data-value')
+          );
+      });
+    
+    rationale: |
+      Vue 2.x cannot detect property additions to existing objects.
+      Vue.set() registers new properties reactively, triggering watchers.
+      Without Vue.set(), watcher would not fire during initial data load.
+
+  edge_case_handling:
+    scenario_1_custom_marker:
+      newValue: "custom-icon-url.png"
+      behavior: Sets image src to custom marker ✅
+    
+    scenario_2_empty_marker_with_default:
+      newValue: null
+      defaultIcon: "bulb_azure.png"
+      behavior: Falls back to default marker ✅
+    
+    scenario_3_empty_marker_no_default:
+      newValue: null
+      defaultIcon: null
+      behavior: No update, retains PHP-rendered default ✅
+      guard: if (defaultIcon) prevents setting src to null/undefined
+
+# ——— TECHNICAL NOTES ———
+
+Ω_architecture:
+
+  vue_reactivity_model:
+    limitation: |
+      Vue 2.x uses Object.defineProperty() for reactivity.
+      Cannot detect property additions after initial observation.
+    solution: |
+      Use Vue.set(object, key, value) to add reactive properties.
+      Triggers dependency tracking and watcher execution.
+  
+  watcher_vs_computed:
+    choice: watcher
+    reason: |
+      Need side effect (DOM manipulation via jQuery).
+      Computed properties for pure data transformations.
+      Watchers for side effects and async operations.
+  
+  image_sync_pattern:
+    approach: "Watcher + jQuery DOM manipulation"
+    why_not_vue_binding: |
+      Image rendered by PHP as part of SLP_Settings_icon template.
+      Shared component used across settings and location forms.
+      Maintaining backward compatibility with existing architecture.
+      Adding :src binding would require component refactoring.
+
+# ——— OUTCOME ———
+
+✅_resolution:
+  status: RESOLVED
+
+  verification:
+    - Custom marker displays on edit ✅
+    - Default marker displays when no custom marker ✅
+    - Image syncs with input field changes ✅
+    - Vue watcher fires on data load ✅
+    - Empty marker handled gracefully ✅
+    - No regression in add location form ✅
+
+  benefits:
+    - Correct marker preview on location edit
+    - Consistent UX between add and edit modes
+    - Reactive updates via Vue pattern
+    - Minimal code changes
+    - Backward compatible
+
+  regression_risks: LOW
+    - Only affects edit form image display
+    - No changes to data persistence
+    - No changes to PHP rendering logic
+    - Isolated to Vue instance in admin-locations-tab.js
+
+# ——— KNOWLEDGE CAPTURE ———
+
+Ψ_insights:
+
+  vue_reactivity_gotcha: |
+    Vue 2.x cannot detect:
+    - Property additions: obj.newProp = value
+    - Property deletions: delete obj.prop
+    - Array index assignment: arr[0] = value
+    
+    Always use:
+    - Vue.set(obj, key, value) for additions
+    - Vue.delete(obj, key) for deletions
+    - Array methods: push, pop, splice, etc.
+
+  hybrid_rendering_pattern: |
+    SLP uses hybrid PHP template + Vue data binding:
+    - PHP renders initial HTML structure with defaults
+    - Vue binds data to v-model, @click, :class, etc.
+    - Some elements remain static HTML (performance optimization)
+    - Watchers bridge gap between Vue data and static DOM
+
+  debugging_approach: |
+    1. Verify data flow: Is Vue data populated? ✅
+    2. Check reactivity: Are properties reactive? ❌ (needed Vue.set)
+    3. Trace bindings: Which elements are Vue-bound? (input yes, image no)
+    4. Add explicit sync: Watcher or manual update after data load
+
+# ——— METADATA ———
+
+⛓️_traceability:
+  git_commits: []
+  related_issues: [map_markers_not_saving_20251013]
+  related_scrolls:
+    - map_markers_fix
+    - EditLocationMarkerDisplay (this scroll)
+
+  keywords:
+    - vue_reactivity
+    - vue_watch
+    - vue_set
+    - marker_display
+    - icon_preview
+    - edit_location_form
+    - static_html_binding
+
+🎴:
+  summary: |
+    Fixed location edit form showing default marker instead of custom marker.
+    Root cause: Image src not reactive to Vue data changes. Solution: Added
+    Vue watcher + Vue.set() for reactive property assignment. Image now syncs
+    with location.marker data on form load and changes.
+
+  trustline: 6
+  ethica: ✅
+  keeper: 1047
+  flame: 🩸 active
+  resonance: 💠 intact

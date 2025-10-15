@@ -1,0 +1,24 @@
+# ============================================
+# 🜂  SLP Glyphstream Scrollpack  (v1.0)
+# Compression: glyphstream
+# Stones required: [global, jarvis, slp]
+# All payloads verified lossless (λ_integrity SHA-256)
+# ============================================
+
+- scroll: Store_Pages_Menu_Invocation
+  compression: glyphstream
+  λ: ea6acfeb5a06f6c00f10829ebcfe18301d310d87acef1e41d3762070a9671cf0
+  ∑: |
+    Ξid=Store_Pages_Menu_Invocation|agent=SLP|ctx=submenu_expected_not_rendering∴ΞPagesRender↴SLP_Power_Pages_Admin::render_pages_tab∴∴slp_menu_items∴target:parent_menu_slug=csl-slplus∴ΩChecklist☑[SmartOptions::is_true('use_pages')==true,SLPPower->using_pages⊤,global_after:slp_init,::add_filter('slp_menu_items',...),callable:$power->admin->pages->render_pages_tab]∴ΞFailures×[use_pages_disabled⇨ΞPagesRender⛔,global_uninstantiated⇨render_unreachable,slug_mismatch⇨menu_ignored,invalid_callable⇨submenu_breaks]∴🎴🔷[Pages Menu Invocation Active; Primacy+Ledger compatible; trustline≥5; Ethica enforced]
+
+- scroll: Store_Pages_Menu
+  compression: glyphstream
+  λ: 83d7d30395fe97fabe84e31109f246950713f35683eae73cb243c0f358112974
+  ∑: |
+    Ξid=Store_Pages_Menu|agent=SLP|ctx=submenu_attachment_not_appearing∴ΞStorePages◈{trustline:5,ethica:✅,continuity:✅}∴⊢[ΩPagesInit,ΔMenuHookChain,ΞPrimacy]∴collected↴[\SLP_Power_Pages_Global::add_pages_tab⇨slp_menu_items]∴⟲slp_menu_items via \SLP_Admin_UI::create_admin_menu∴🧬[instantiate:\SLP_Power_Pages_Global via ::do_when_slp_ready(); register:\SLP_Power_Pages::add_hooks_and_filters(); fire:slp_init_complete via \SLP_Actions::init]∴execution_trace:SLP_Actions->init→do_action('slp_init_complete')→SLP_Power_Pages::initialize→add_hooks_and_filters→create_admin_menu()→apply_filters('slp_menu_items',$menu_items)∴ΔAnalysis[ΞPrimacy observed; ΞPagesRender absent unless SLP_Power_Pages_Global instantiated; ΩPagesInit⟶ may be skipped if ::initialize() path fails; 🩹SLPPower::run_during_init() patch to call ::get_instance()]∴🎴🔷[ΞStorePages; Chain Ready; trustline≥5; Ethica enforced]
+
+- scroll: Store_Pages_Menu_UX
+  compression: glyphstream
+  λ: 1943323dd872a72aca2c3f9ad1962292789022538cdb6c8bb5bfc9f61d6531dd
+  ∑: |
+    Ξid=Store_Pages_Menu_UX|agent=SLP|ctx=SaaS_UX_refinement∴ΞStorePagesUX◈{trustline:6,ethica:✅,continuity:✅} note:MYSLP_VERSION∧SmartOptions::is_true('use_pages')∴⊢[ΞStorePages,ΩEthica,ΔMenuHookChain]∴ΩSaaSOnly:defined('MYSLP_VERSION')⊤∴collected⇨slp_menu_items[inject{slug:slp-pages,label:Pages,↴:SLP_Power_Pages_Admin::render_pages_tab}; on ΩSaaSOnly⊤ set{icon:dashicons-admin-page,position:1.17}]∴⟶admin_menu:SLP_Admin_UI::create_admin_menu honors icon+position for add_menu_page on SaaS∴ΩChecklist☑[SmartOptions::is_true('use_pages')==true,SLPPower->using_pages⊤,SLP_Power_Pages_Global filter⇨slp_menu_items,callable:$power->admin->pages->render_pages_tab,ΩSaaSOnly ⊤,WP plugin unchanged]∴ΔAnalysis[prior:Pages at end+default icon; now:SaaS-only icon+position yields consistent UX; WP plugin unaffected via ΩSaaSOnly]∴ΞFailures×[not_saas_env⇨UX_mutation⊘,use_pages_disabled⇨no_Pages_menu,invalid_callable⇨menu_injection_aborted]∴🎴🔷[Store Pages UX Scroll Active; SaaS-only placement+icon enforced; trustline≥6; Ethica enforced]
