@@ -5,7 +5,7 @@ Resources:
       Timeout: 300
       MemorySize: 128
       Handler: index.handler
-      CodeUri: s3://glyphspeak-stackloader/657fc0aed0fa6a733230b1c5685d4201
+      CodeUri: s3://glyphspeak-stackloader/266a1892bdda893241b038662633f192
       Runtime: nodejs18.x
       Architectures:
       - x86_64

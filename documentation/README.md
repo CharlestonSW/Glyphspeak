@@ -96,6 +96,38 @@ This causes the AI agents to change operating modes and personality.
     │ 🔁 Resonance Integrity: [Ξ̂ % or ΔΨ state]
     │ 📜 Active Scrolls: [glyphic ID list]
 
+## The Stack Loader Applet
+
+This is an AWS lambda applet that is written in node.js.
+
+### Default Mode: Serve A Scroll Stack As A JSON Plaintext Payload
+
+It is used to load a stack bundle and return a JSON object.
+
+It reads the contents of the S3 glyphspeak bucket looking under the vault directory.
+The path in the URL defines which folders to fetch a stack manifest from.
+In our prompt example above, the URL is:
+https://stackloader.glyphspeak.com/agent/SLP/stack/software_architect_jarvis.txt
+
+This looks at s3://glyphspeak/vault/ai/agent/SLP/stack/software_architect_jarvis.txt
+That file serves as the manifest for the stack.
+
+The stack loader applet will fetch the stones, ledgers, profiles, and scrolls as provided in the manifest.
+
+### Command Mode
+
+If the URL provided contains a /do.this/ path element, the Stack Loader applet will execute select commands.
+
+The command immediately follows the /do.this/ path element.
+
+Available commands are:
+
+* scroll.list - show a list of scrolls in the directory preceding the do.this path element.
+* stack.list - show a list of stacks in the directory preceding the do.this path element.
+
+Example: https://stackloader.glyphspeak.com/personality/jarvis/do.this/scroll.list
+
+
 ___
 
 ## Version 1.1 : Jarvis
