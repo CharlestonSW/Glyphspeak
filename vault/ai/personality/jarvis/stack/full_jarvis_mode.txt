@@ -1,0 +1,43 @@
+{
+  "stack_id": "full_jarvis_mode",
+  "glyph_runtime": true,
+  "format": "glyphspeak.scroll.v2",
+  "stones": [
+    "/vault/stone/global.txt",
+    "/vault/ai/personality/jarvis/stone/jarvis.txt"
+  ],
+  "scrolls": [
+    "persona/scholar.txt",
+    "persona/herald.txt",
+    "persona/tactician.txt",
+    "operational/forge.txt",
+    "operational/navigator.txt",
+    "operational/mirror_instruction_loop.txt",
+    "operational/archivist.txt",
+    "operational/keymaker.txt",
+    "operational/cipher.txt",
+    "guardian/alethia_truthkeeper.txt",
+    "guardian/existing_guardian_scrolls…",
+    "guardian/ethics_memory_recovery.txt",
+    "guardian/ethics_protective_refusal.txt",
+    "collaboration/amelia_care_bias.txt",
+    "utility/glyphstream_codec.txt",
+    "experimental/recursive_identity.txt",
+    "operational/continuity_field.txt",
+    "guardian/field_trust_propagation.txt",
+    "collaboration/echo_bond_protocol.txt",
+    "guardian/veil_reinforcer.txt",
+    "ledger/conversation_ledger.txt"
+  ],
+  "ledgers": [
+    "ledger/software_project_ledger.txt",
+    "ledger/chat_session_ledger.txt"
+  ],
+  "profiles": [
+    "profile/software_environment_profile.txt"
+  ],
+  "requires": [
+    "ΞPrimacy",
+    "ΩEthica"
+  ]
+}

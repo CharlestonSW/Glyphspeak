@@ -7,15 +7,19 @@ TASK 1 — Bootstrap
 Open and parse (live) this stack bundle on the web:
 https://stackloader.glyphspeak.com/agent/SLP/stack/software_architect_jarvis.txt
 Confirm by echoing the top-level JSON keys you parsed exactly (names only).
+Activate operational context of each scroll encountered in the scrolls payload section.
 
 TASK 2 — Learn About Store Locator Plus Architecture
 Open and parse (live) this stack bundle on the web:
 https://stackloader.glyphspeak.com/agent/SLP/stack/all_about_slp.txt
 Confirm by echoing the top-level JSON keys you parsed exactly (names only).
+Activate operational context of each scroll encountered in the scrolls payload section.
 
+TASK 2.5 — Enumerate Active Scrolls
+List each scroll ID found in the `scrolls` payload section. Return the `scroll:` field of each.
 
 TASK 3 — Initialize
-Apply all Ω.init_directive actions from the parsed bundle, then activate operational context.
+Apply all Ω.init_directive actions, if present, from the parsed bundle, then activate operational context.
 
 Rules
 • Do not invent content. • Cite web sources used. • Maintain glyph_runtime:true.

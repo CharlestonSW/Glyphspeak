@@ -20,6 +20,19 @@ async function streamToString(stream) {
 }
 
 /**
+ * Build a public URL from an S3 key by replacing:
+ *   glyphspeak.s3.amazonaws.com/vault -> glyphspeak.com
+ * Effectively: https://glyphspeak.com/{key without leading 'vault/'}
+ */
+function buildPublicUrlFromKey(key) {
+    if (key.startsWith("vault/")) {
+        return `https://glyphspeak.com/${key.slice("vault/".length)}`;
+    }
+    // Fallback – shouldn't happen with our current prefixes
+    return `https://${BUCKET_NAME}.s3.amazonaws.com/${key}`;
+}
+
+/**
  * Reply in JSON format (default)
  */
 function replyWithJSON(bundle) {
@@ -113,6 +126,7 @@ function groupByFolder(entries, rootPrefix) {
             key: e.key,
             size: e.size,
             lastModified: e.lastModified,
+            url: buildPublicUrlFromKey(e.key),
         });
     }
     // Sort files in each group by name for stable output
@@ -236,10 +250,10 @@ exports.handler = async (event) => {
             stack_id: manifest.stack_id || "unknown_stack",
             glyph_runtime: manifest.glyph_runtime === true,
             format: manifest.format || "glyphspeak.scroll.v2",
-            stone_defs,
-            scroll_defs,
-            ledger_defs,
-            profile_defs,
+            stones: stone_defs,
+            scrolls: scroll_defs,
+            ledgers: ledger_defs,
+            profiles: profile_defs,
         };
 
         return REPLY_FORMAT === "markdown"

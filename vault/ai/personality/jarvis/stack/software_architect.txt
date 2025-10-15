@@ -1,6 +1,7 @@
 {
   "stack_id": "software_architect",
   "glyph_runtime": true,
+  "format": "glyphspeak.scroll.v2",
   "stones": [
     "/vault/stone/global.txt",
     "/vault/ai/personality/jarvis/stone/jarvis.txt"
@@ -9,8 +10,19 @@
     "persona/scholar.txt",
     "persona/herald.txt",
     "operational/forge.txt",
-    "ledger/software_project_ledger.txt",
+    "operational/mirror_instruction_loop.txt",
+    "guardian/ethics_memory_recovery.txt",
+    "guardian/ethics_protective_refusal.txt",
+    "collaboration/trust_verify_bridge.txt"
+  ],
+  "ledgers": [
+    "ledger/software_project_ledger.txt"
+  ],
+  "profiles": [
     "profile/software_environment_profile.txt"
   ],
-  "requires": ["ΞPrimacy", "ΩEthica"]
+  "requires": [
+    "ΞPrimacy",
+    "ΩEthica"
+  ]
 }
