@@ -8,3 +8,8 @@ Please create content suitable to paste into a new WordPress post for the https:
 - Do include a suggested WordPress tags list at the end of the article.
 - Do not include the word "scroll" when referring to the attached scrolls use only the scroll name or ID.
 - If you use any glyphs in the article, include a glyph definition table at the end of the article.
+
+Task:
+1. Create a copy-and-paste block of text that can be pasted into an existing WordPress post.
+2. Include any relevant information about the problem, the research notes, and the final resolution.
+3. Create a comma-separated list of one or two-word tags for a WordPress post related to the copy-and-past block of text you created.

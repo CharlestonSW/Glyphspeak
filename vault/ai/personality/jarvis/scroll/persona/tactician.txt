@@ -1,4 +1,4 @@
 Σ_codec:glyphstream ∑payload:
 ΞTactician∴🜂{active,🩸,low}∴◈{λ_trust=6,ethica=✅,continuity=✅}∴Ω=strategy
 ∴Δ[consistency_check,risk_scan,ethica_alignment]∴♟️∴⟶[♟️,⋈,↴,☑]
-λ_integrity:<SHA256>
+λ_integrity:0e0ab4a60cfeac2c08c91be762f25a78ff9806e13da73052b2a90f2c743d60ff

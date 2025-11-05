@@ -1,0 +1,63 @@
+protocol: glyphspeak.v2
+ledger: DGX_Spark_Research_Ledger
+version: 0.1
+glyph_runtime: true
+glyph_scope: [project, research, session]
+anchors:
+  primacy: initiator_of_trusted_continuity
+  ethica: behavioral_guardrails
+  archivist: enabled
+policy:
+  ask_before_commit: true
+  status_states: [proposed, active, revised, superseded]
+  checksum: sha256(payload_string)
+entries:
+  - id: L-0001
+    kind: project_charter
+    status: proposed
+    timestamp: 2025-10-19T15:07:19Z
+    witness: [user, assistant]
+    λ_integrity: sha256:8a04a80cd401e4879d76f42ff1c26912acb30b797032cbfdbac24ab1274f2628
+    content: |-
+      goals:
+        - Build a CustomGPT (Jarvis variant) dedicated to learning and documenting NVIDIA DGX Spark.
+        - Maintain a living glyphspeak ledger of capabilities, configs, benchmarks, and operational know-how.
+        - Prioritize official NVIDIA docs and product pages for facts; annotate news coverage with dates.
+      deliverables:
+        - CustomGPT instructions + settings + attachment list.
+        - Research sprints and test plans (inference, fine-tuning, clustering, networking).
+        - Periodic exports of this ledger in AI-readable glyphspeak format.
+      cadence:
+        - Ongoing; snapshot ledger on major milestones or upon request.
+      ledger_policy:
+        - Ask to create a new ledger entry whenever material knowledge is shared or derived.
+        - Mark entries as proposed → active → revised; include λ_integrity for each payload.
+      safety_alignment:
+        - Enforce ethics & safety gates; no hallucinated specs; cite sources and dates.
+  - id: L-0002
+    kind: baseline_factsheet
+    status: proposed
+    timestamp: 2025-10-19T15:07:19Z
+    witness: [assistant]
+    λ_integrity: sha256:03d1bfe139108d85611b62a050dda1e83e882d103bf3e6517efe73e45cf0d976
+    content: |-
+      summary:
+        - Architecture: NVIDIA Grace Blackwell GB10 Superchip (integrated CPU+GPU).
+        - Memory: 128 GB coherent unified LPDDR5x (256-bit, ~273 GB/s).
+        - Performance: up to ~1 PFLOP AI at FP4 with sparsity (theoretical), 5th‑gen Tensor Cores.
+        - Storage: up to 4 TB NVMe M.2 (self‑encrypting).
+        - Networking:
+            - 1× 10 GbE (RJ‑45)
+            - ConnectX‑7 SmartNIC 200 Gbps; rear panel exposes 2× QSFP for Spark‑to‑Spark link
+        - Clustering: two DGX Spark units can be paired for workloads up to ~405B parameters.
+        - Model sizes: local inference up to ~200B params; fine‑tune up to ~70B (per NVIDIA site).
+        - Power: 240 W external supply.
+        - Size/weight: 150 × 150 × 50.5 mm; ~1.2 kg.
+        - OS/stack: NVIDIA DGX OS; CUDA/cuDNN; NVIDIA Container Runtime; NGC access; Playbooks.
+      sources:
+        - https://www.nvidia.com/en-us/products/workstations/dgx-spark/
+        - https://docs.nvidia.com/dgx/dgx-spark/hardware.html
+        - https://docs.nvidia.com/dgx/dgx-spark/system-overview.html
+        - https://docs.nvidia.com/dgx/dgx-spark/spark-clustering.html
+      notes:
+        - Treat all specs as preliminary and subject to change; keep dates with claims.

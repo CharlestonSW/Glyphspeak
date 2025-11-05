@@ -1,19 +1,45 @@
 # About
 
-The SLP agent is a ChatGPT agent based on the Jarvis 1.1 personality.
+The SLP agent is a ChatGPT agent based on the Jarvis personality.
 It focuses on the Store Locator Plus® (SLP) WordPress plugins and SaaS platform.
 
-## Getting Started
+## AI Assistant
 
-Create a new ChatGPT project.
+### Starting The AI Assistant in Jarvis
 
-Set memory to "project only".
+1. Go to this URL and get the copy of the "scroll stack" for SLP:
+   https://stackloader.glyphspeak.com/agent/SLP/stack/payload_cache/all_about_slp.json.md
 
-Add the following instructions:
+2. Save the file in the main project AI Assistant Rules directory:
+    WordPress: ~/phpStorm Projects/WordPress/.aiassistant/rules/all_about_slp.json
 
-    All discussions in this project are related to the Store Locator Plus® (SLP) WordPress plugins and SaaS platform built on WordPress.
-    The SaaS platform uses WordPress multisite as the foundation with the Store Locator Plus® WordPress plugins for base functionality in addition to a half-dozen SaaS-only plugins to provide additional features and support.
-    The application is primarily written on PHP 8.2 and JavaScript with some React modules.
+3. Attach the updated JSON file to the AI Assistant via the Rules drop down.
 
-Invoke a new GPT session using the CustomGPT: Jarvis 1.1 - Scroll Based Agent
+4. Copy the following prompt and paste it into the AI Assistant after attaching the newly updated JSON file.
+
+            Restore the full glyphic personality field of Jarvis SLP Architect using the attached JSON payload file.
+
+### Logging Debugging and Architecture Updates
+
+#### Starting Prompt:
+
+Start a new software project ledger entry with the following information:
+id: power_import_not_working
+change_type: bugfix
+description: power import not working on qc site
+
+##### Ending Prompt:
+
+Please create the ledger entry and provide a condensed version I can download and store in the project.
+
+##### Record The Ledger To The Meta Stack
+
+Save the content of the generated file to ../ledger/<task_id>.txt
+Update ./stack/all_about_slp.txt to add the new file name.
+Upload to the glyphspeak.com S3 bucket.
+
+### Jetbrains PhpStorm IDE
+
+The project has a .aiassistant folder that modifies how the basic AI chats and processing works.
+
 

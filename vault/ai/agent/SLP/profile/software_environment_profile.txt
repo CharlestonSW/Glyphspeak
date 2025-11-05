@@ -1,12 +1,12 @@
 protocol: glyphspeak.v2
 profile: SoftwareEnvironmentProfile
 version: "1.0"
-resonance_summary:
+application_meta:
   application_name: "Store Locator Plus®"
   domain: ["web", "plugin", "saas", "cloud"]
   architecture_style: ["modular", "multisite", "plugin-based"]
-  languages: ["PHP 8.2", "JavaScript (ES2020)", "React"]
-  frameworks: ["WordPress", "React", "Custom SLP Framework"]
+  languages: ["PHP 8.3.2", "JavaScript (ES2020)", "React"]
+  frameworks: ["WordPress 6.4.2 Multisite ", "React", "Custom SLP Framework"]
   ui_frameworks: ["WordPress admin UI", "Material UI", "Vue"]
   css_processing: ["SCSS", "SaSS"]
   datastore: ["MySQL", "WordPress options API", "Transient cache"]
@@ -15,7 +15,5 @@ resonance_summary:
   automation_pipelines: ["GitHub Actions", "npm scripts"]
   logging_monitoring: ["Custom PHP logs", "ErrorLog handler", "WP_DEBUG_LOG"]
   build_tools: ["npm", "AWS CodeBuild", "AWS CodePipeline", "GitHub Actions"]
-  performance_targets: ["TTFB < 250ms", "API response < 400ms"]
   security_posture: ["HTTPS enforced", "WP nonces validated"]
   ux_design_system: ["Responsive admin layout"]
-  resonance_tags: ["stability", "usability", "performance", "maintainability"]

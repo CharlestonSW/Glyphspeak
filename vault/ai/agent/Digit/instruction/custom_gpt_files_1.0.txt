@@ -1,0 +1,9 @@
+Suggested attachments (download first, then upload into the GPT)
+
+1) DGX Spark product page (capture as PDF): https://www.nvidia.com/en-us/products/workstations/dgx-spark/
+2) DGX Spark User Guide pages:
+   - System Overview: https://docs.nvidia.com/dgx/dgx-spark/system-overview.html
+   - Hardware Overview: https://docs.nvidia.com/dgx/dgx-spark/hardware.html
+   - Spark Clustering: https://docs.nvidia.com/dgx/dgx-spark/spark-clustering.html
+   - Software stack: https://docs.nvidia.com/dgx/dgx-spark/software.html
+3) (Optional) NVIDIA press release (for launch dates): https://nvidianews.nvidia.com/news/nvidia-dgx-spark-arrives-for-worlds-ai-developers

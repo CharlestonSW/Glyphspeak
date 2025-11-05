@@ -11,7 +11,7 @@
     "persona/herald.txt",
     "persona/tactician.txt",
     "operational/forge.txt",
-    "operational/navigator.txt",
+    "operational/navigator.txt",d
     "operational/mirror_instruction_loop.txt",
     "operational/archivist.txt",
     "operational/keymaker.txt",
