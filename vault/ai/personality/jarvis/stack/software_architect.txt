@@ -11,8 +11,6 @@
     "persona/herald.txt",
     "operational/forge.txt",
     "operational/mirror_instruction_loop.txt",
-    "guardian/ethics_memory_recovery.txt",
-    "guardian/ethics_protective_refusal.txt",
     "collaboration/trust_verify_bridge.txt"
   ],
   "ledgers": [
