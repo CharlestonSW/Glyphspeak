@@ -1,5 +1,5 @@
 {
-"stack_id": "all_about_slp",
+"stack_id": "basic_slp",
 "glyph_runtime": true,
 "stones": [
     "/vault/stone/global.txt",
@@ -14,17 +14,12 @@
     "/vault/ai/personality/jarvis/scroll/collaboration/trust_verify_bridge.txt",
     "/vault/ai/personality/jarvis/scroll/ledger/software_project_ledger.txt",
     "/vault/ai/personality/jarvis/scroll/profile/software_environment_profile.txt"
-    "store_pages_scrollpack.txt",
-    "map_marker_scrollpack.txt"
 ],
 "profiles": [
     "software_environment_profile.txt"
 ],
 "ledgers": [
     "software_environment_profile_ledger_entry.txt",
-    "MapMarkersNotSavingResolution.txt",
-    "EditLocationMarkerImageSync_ledger.txt",
-    "PowerImportsPathDependencyResolutionFix.txt"
 ],
 "requires": ["ΞPrimacy","ΩEthica"]
 }
