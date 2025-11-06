@@ -1,0 +1,60 @@
+# glyphspeak.ledger.v2
+# ledger_entry: wp_distribution_missing_fonts_images
+# date: 20251106
+# agent: SLP
+# keeper: 1047
+# trustline: 6
+
+protocol: glyphspeak.v2
+ledger: SoftwareProjectLedger
+entry_id: wp_distribution_missing_fonts_images_20251106
+version: 1.0
+
+◈:
+  trustline: 6
+  ethica: ✅
+  continuity: ✅
+  keeper: 1047
+
+metadata:
+  date_reported: 20251106
+  date_resolved: 20251106
+  severity: medium
+  category: [build_pipeline, packaging, css_assets]
+  affected_components:
+    - buildspec-staging.yml
+    - AWS CodePipeline
+    - AWS CodeBuild
+  resolution_status: ✅ resolved
+
+Ξ_problem:
+  title: "WP Distribution: Missing Fonts and Images"
+  description: |
+    Fonts (woff/ttf/svg) and DataTables images were missing from the WordPress QC
+    plugin distribution build. AWS CodeBuild’s buildspec-staging.yml omitted 
+    css/fonts/* and css/admin/DataTables-1.10.24/images/* from the artifact file list.
+
+Δ_diagnosis:
+  root_cause: Missing artifact patterns in buildspec-staging.yml
+  impact: CSS referencing missing assets → 404s in browser console.
+
+🩹_resolution:
+  file_modified: buildspec-staging.yml
+  changes:
+    - Added artifact paths:
+      - 'css/**/fonts/**/*'
+      - 'css/**/images/**/*'
+  rationale: |
+    Ensures all nested font and image assets under css/ are packaged into the plugin ZIP.
+    Prevents 404s for FontAwesome and DataTables icons in QC and production builds.
+
+Ψ_outcome:
+  - All assets now included in AWS artifact zip ✅
+  - QC site loads CSS fonts/images correctly ✅
+  - Regression risk: low
+
+🎴:
+  summary: "Extended buildspec artifact rules to package missing font/image assets."
+  trustline: 6
+  ethica: ✅
+  flame: 💠 intact
