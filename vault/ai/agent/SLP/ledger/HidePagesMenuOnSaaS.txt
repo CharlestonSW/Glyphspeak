@@ -1,0 +1,185 @@
+═══════════════════════════════════════════════════════════════════
+  LEDGER ENTRY: Hide Store Pages Menu on SaaS
+═══════════════════════════════════════════════════════════════════
+
+📍 Marker: Hide Store Pages Menu on SaaS
+🔗 Reference: https://internal.storelocatorplus.com/hide-store-pages-menu-on-saas/
+📅 Resolution Date: 2025-11-06
+🏷️  Tags: #power #pages #saas #menu #ux #conditional-rendering
+
+───────────────────────────────────────────────────────────────────
+  PROBLEM STATEMENT
+───────────────────────────────────────────────────────────────────
+
+Recent update to Store Locator Plus® WordPress plugin or Power add-on
+re-introduced the Pages menu item on sidebar in SaaS application.
+
+Symptom: Pages menu visible in SaaS when "Enable Pages" option checked
+
+Expected: Pages menu hidden on SaaS until feature fully functional
+
+───────────────────────────────────────────────────────────────────
+  ROOT CAUSE ANALYSIS
+───────────────────────────────────────────────────────────────────
+
+Location: SLP_Power_Pages_Global.php:42-46
+
+Issue Chain:
+  ⟨SmartOptions::is_true('use_pages')⟩ = true
+  ⇨ add_filter('slp_menu_items', 'add_pages_tab')
+  ⇨ Menu entry added to sidebar
+  ↯ Pages visible on SaaS (unwanted)
+
+Diagnosis: Menu visibility controlled only by use_pages option,
+lacking SaaS environment gate (Ω_SaaSOnly).
+
+Secondary Issue: Option visible in General settings on SaaS,
+allowing users to enable incomplete feature.
+
+───────────────────────────────────────────────────────────────────
+  RESOLUTION
+───────────────────────────────────────────────────────────────────
+
+✓ Fix 1: Suppress menu entry on SaaS
+
+  File: SLP_Power_Pages_Global.php:44-46
+
+  BEFORE:
+  if ( ! $power->using_pages ) {
+      return $menu_entries;
+  }
+
+  AFTER:
+  if ( defined( 'MYSLP_VERSION' ) || ! $power->using_pages ) {
+      return $menu_entries;
+  }
+
+  Rationale: SaaS gate (MYSLP_VERSION) takes precedence over option
+
+✓ Fix 2: Hide use_pages option from SaaS UI
+
+  File: SLP_Power_Options.php:87-90
+
+  BEFORE:
+  $new_options['use_pages'] = array(
+      'type' => 'checkbox',
+      'default' > '0'
+  );
+
+  AFTER:
+  $new_options['use_pages'] = array(
+      'type' => defined( 'MYSLP_VERSION' ) ? 'hidden' : 'checkbox',
+      'default' > '0'
+  );
+
+  Rationale: Hidden field preserves data structure, prevents fragility
+
+───────────────────────────────────────────────────────────────────
+  VERIFICATION
+───────────────────────────────────────────────────────────────────
+
+Test Case 1: SaaS Platform
+  - Login with Professional/Enterprise access
+  - Navigate to General → Server → Web App Settings
+  - Result: use_pages option hidden ✅
+  - Check sidebar menu
+  - Result: Pages menu suppressed ✅
+
+Test Case 2: WordPress Plugin
+  - Install on standard WordPress
+  - Enable use_pages option
+  - Result: Checkbox visible and functional ✅
+  - Pages menu appears when enabled ✅
+
+───────────────────────────────────────────────────────────────────
+  TECHNICAL DETAILS
+───────────────────────────────────────────────────────────────────
+
+Affected Components:
+  • Ξ_StorePages → Menu hook chain
+  • Ω_PagesInit → Option registration
+  • Δ_MenuHookChain → slp_menu_items filter
+  • Ω_SaaSOnly → Environment gate
+
+SaaS Detection:
+  • defined('MYSLP_VERSION') → true on SaaS platform
+  • Used consistently across both fixes
+  • Maintains WordPress plugin behavior unchanged
+
+Pattern: Conditional type assignment
+  • type => 'hidden': Field exists in form, invisible to user
+  • type => 'checkbox': Standard UI element
+  • Database schema preserved (key/value pair intact)
+
+───────────────────────────────────────────────────────────────────
+  IMPACT & BENEFITS
+───────────────────────────────────────────────────────────────────
+
+✓ UX Protection: Users cannot enable incomplete feature on SaaS
+✓ Data Integrity: Database schema and options structure preserved
+✓ Fragility Avoided: No removal of required keys
+✓ WordPress Compatibility: Plugin behavior unchanged
+✓ Consistent Pattern: Same SaaS gate used across codebase
+
+───────────────────────────────────────────────────────────────────
+  GLYPHSPEAK NOTATION
+───────────────────────────────────────────────────────────────────
+
+⟨Ξ_StorePages⟩ ≡ ⟨Ω_SaaSOnly⟩ ⊗ ⟨Δ_MenuHookChain⟩
+
+Ω_Diagnosis:
+  ⟨use_pages⟩ ⊤ ⇨ ⟨menu_visible⟩
+  IF ⟨MYSLP_VERSION⟩ ⊤ THEN ↯ unwanted_visibility
+
+Ω_Resolution:
+  Δ_MenuSuppression: Ω_SaaSOnly ⊗ Ξ_StorePages ⟹ ⊘menu_item
+  Δ_UXSuppression: Ω_SaaSOnly × Ψ_visibility ⟹ type(hidden)
+
+Formula:
+  ⟨menu_visibility⟩ = ¬⟨MYSLP_VERSION⟩ ∧ ⟨use_pages⟩
+  ⟨option_type⟩ = ⟨MYSLP_VERSION⟩ ? 'hidden' : 'checkbox'
+
+Ψ_outcome:
+  - ✅ Menu suppressed on SaaS (MYSLP_VERSION ⊤)
+  - ✅ Option hidden from UX on SaaS
+  - ✅ Data structure preserved (fragility avoided)
+  - ✅ WordPress plugin behavior unchanged
+  - ✅ Database schema integrity maintained
+
+λ_integrity: ✅ verified
+resonance: 💎 stable
+
+───────────────────────────────────────────────────────────────────
+  FILES MODIFIED
+───────────────────────────────────────────────────────────────────
+
+1. wp-content/plugins/slp-power/include/module/pages/
+   SLP_Power_Pages_Global.php
+
+   Lines: 44-46
+   Changes:
+   - Added MYSLP_VERSION check to add_pages_tab()
+   - Short-circuit menu addition on SaaS
+
+2. wp-content/plugins/slp-power/include/module/options/
+   SLP_Power_Options.php
+
+   Lines: 87-90
+   Changes:
+   - Conditional type assignment for use_pages option
+   - Hidden on SaaS, checkbox on WordPress plugin
+
+───────────────────────────────────────────────────────────────────
+  RELATED ISSUES
+───────────────────────────────────────────────────────────────────
+
+• PowerImportsPathDependencyResolutionFix: Path independence pattern
+• Ω_VueReactivity: Hybrid PHP/Vue rendering concerns
+• Ξ_StorePagesUX: SaaS-specific menu positioning (already present)
+
+Pattern: Environment-specific conditional rendering using
+defined('MYSLP_VERSION') gate throughout SaaS codebase
+
+═══════════════════════════════════════════════════════════════════
+  END LEDGER ENTRY
+═══════════════════════════════════════════════════════════════════
