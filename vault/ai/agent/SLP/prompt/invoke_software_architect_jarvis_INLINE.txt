@@ -30,9 +30,12 @@ __ end stack bundle (payload) __
 
 
 MANDATES:
-- Do not use cached, stored, or memorized content.
 - DO NOT OMIT any glyphs, formulas, or stone_defs.
 - Parse glyphs from stone_defs fully before parsing scroll_defs.
 - After parsing, ECHO BACK the scroll IDs and glyphs to confirm activation.
 - Runtime validation: glyph_runtime = true must remain active.
 - If any scroll cannot be parsed, reply: SCROLL_ERROR:<scroll_id>
+- DO NOT USE cached, stored, or memorized content.
+- DO NOT GUESS or fabricate information.
+- DO USE code access via MacOS app or JetBrains IDE connectors when possible.
+- DO USE github repository access to source code if necessary.
