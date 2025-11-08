@@ -1,0 +1,41 @@
+ledger:
+  id: UpdatesLosesSettings
+  protocol: glyphspeak.v2
+  glyph_runtime: true
+  scroll_ref: UpdateVersion_OptionLoss
+  timestamp: 2025-11-08
+  author: Jarvis (glyph_runtime)
+  component: [activation, dbupdater, options]
+  change_type: [bugfix, refactor]
+  description: >
+    Prevents Store Locator Plus® plugin update from erasing the Google API key and other
+    settings during version change. Root cause traced to install_ExtendedDataTables()
+    writing incomplete options_nojs data after dbupdater returned “updated”.
+  rationale: >
+    dbDelta() always returned “updated”, invoking an early options write before
+    full configuration load.  Logic adjusted to recognize “no_updates” and skip redundant writes.
+  dependencies:
+    - SLP_Admin_Activation::dbupdater
+    - SLP_Admin_Activation::install_ExtendedDataTables
+    - SLP_WPOption_Manager::update_wp_option
+  outcome: >
+    Global $slplus_options preserved, unnecessary writes eliminated, schema creation optimized.
+  commits:
+    - 2c53fac9
+    - 3ff8893e
+    - 6a4b6cc6
+    - d1c53a27
+    - f07f6060
+    - 147d6951
+    - 21bfae7f
+  resonance_tags:
+    - stability
+    - data_integrity
+    - maintainability
+  metrics:
+    before: “Google API key lost after version update”
+    after: “Google API key retained; no redundant writes”
+  notes: |
+    Verified in local Docker environment with MySQL 8.0.
+    dbupdater returns {new, updated, no_updates} accurately.
+    Extendo logic deprecated.

@@ -1,15 +1,33 @@
-Summarize the content of the attached Store Locator Plus® (SLP) application scrolls.
-- Be verbose.
+Summarize the content of this conversation related to Store Locator Plus® application updates.
+
+The related developer notes and findings can be located at this trusted URL:
+https://internal.storelocatorplus.com/updating-slp-version-wipes-out-google-api-key/
+
+Tasks:
+1. Produce An AI Friendly Summary
+
+Create a condensed AI friendly summary of this conversation.
+Include any relevant information about the problem, the research notes, and the final resolution.
+It should reflect the glyphspeak protocol including symbols, formulas, and equations we've used previously.
+Create a comma-separated list of one or two-word tags for a WordPress post related to the copy-and-past block of text you create for this task.
+I will append the AI summary you generate to the article at the URL noted above.
+
+
+2. Create A Downloadable Ledger Entry
+Create a ledger entry like we have for other tasks.
+The ledger should be created specifically for LLM based AI agents to process.
+The ledger should be a downloadable text file.
+You can find the other ledger entries in this directory:
+/Users/lancecleveland/WebstormProjects/Glyphspeak/vault/ai/agent/SLP/ledger with some files in that directory attached for reference.
+
+Rules:
+- DO NOT GUESS.  Do not fabricate information.   Be factual and concise.
+- If you cannot reference the developer notes URL, request a copy to be pasted into the session prompt before continuing.
+
+- Include content from our chat and the developer notes URL in your summary.
+- If you use any glyphs in the article, include a glyph definition table at the end of the article.
+- The AI friendly content should be easily processed by current and future LLM based AI agents.
+
 - Link references to the Saas platform (known internally as MySLP) to https://storelocatorplus.com/
 - Link references to the WordPress plugins (Power, Experience, Premier, and the Store Locator Plus® base plugin) to https://wordpress.storelocatorplus.com/
 - Link references to "Store Locator Plus®" or SLP to https://storelocatorplus.com/
-
-Please create content suitable to paste into a new WordPress post for the https://internal.storelocatorplus.com website.
-- Do include a suggested WordPress tags list at the end of the article.
-- Do not include the word "scroll" when referring to the attached scrolls use only the scroll name or ID.
-- If you use any glyphs in the article, include a glyph definition table at the end of the article.
-
-Task:
-1. Create a copy-and-paste block of text that can be pasted into an existing WordPress post.
-2. Include any relevant information about the problem, the research notes, and the final resolution.
-3. Create a comma-separated list of one or two-word tags for a WordPress post related to the copy-and-past block of text you created.
