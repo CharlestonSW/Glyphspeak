@@ -1,0 +1,30 @@
+entry:
+  id: EditLocationSaveError
+  timestamp: "2025-11-08 00:00 UTC"
+  author: "SLP Development Team"
+  component: ["core","Power","Experience"]
+  change_type: ["bugfix"]
+  description: >
+    Resolves false “Could not update the location data.” notifications
+    when editing a location in the Store Locator Plus® system.
+    Applies to both the WordPress plugins and the MySLP SaaS platform.
+  cause: >
+    \SLPlus_Location::MakePersistent and related insert/update calls
+    treated 0 rows updated as failure because of a non-strict
+    truthy check on wpdb->update() / wpdb->insert().
+  correction: >
+    Use strict equality (=== false) to detect genuine SQL errors.
+    Zero row updates are valid when only extended data changes.
+  affected_paths:
+    - classes/class.slplus-location.php
+    - modules/power/includes/category-save.php
+    - modules/experience/includes/marker-save.php
+  test_matrix:
+    - main update > 0 only → success
+    - ext update > 0 only → success
+    - no updates (0/0) → success
+    - any === false error → failure
+  outcome: "False error toast eliminated; genuine SQL failures still reported."
+  verified: true
+  reviewer: "Jarvis AI Architect / SLP Core Maintainer"
+  resonance_tags: ["data-integrity","ui-feedback","WordPress-plugin","MySLP"]
