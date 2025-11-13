@@ -1,0 +1,55 @@
+# glyphspeak.ledger.v2
+# ledger_entry: map_markers_not_saving_extended_reload
+# date: 2025-11-11
+# agent: SLP
+# trustline: 6
+# keeper: 1047
+
+protocol: glyphspeak.v2
+ledger: SoftwareProjectLedger
+entry_id: map_markers_not_saving_extended_reload_20251111
+version: 1.0
+
+Ξ_problem:
+  title: "Saving Custom Map Markers – Extended Data Reload Required"
+  description: |
+    When updating an existing location, custom map marker changes were not persisted
+    if the extended data columns (Experience plugin fields) were initially null.
+    The save handler used cached data from the initial read and skipped fields with
+    null-to-new-value transitions.
+  component: save_edited_location()
+  context: [MySLP SaaS, WordPress plugins]
+
+Δ_diagnosis:
+  root_cause:
+    - Extended data not refreshed after reading base location record.
+    - save_edited_location() skipped updating marker_url due to stale in-memory values.
+
+🩹_fix:
+  change: |
+    Force save_edited_location() to reload extended data columns after reading
+    an existing database record to ensure null values can be updated properly.
+  effect: |
+    Ensures fields like marker_url or custom icons persist on save even when
+    the field was empty previously.
+
+✅_resolution:
+  verified: ✅
+  verified_by: QA Team
+  date_verified: 2025-11-11
+  result: |
+    Custom map marker selections now save correctly for both new and existing locations.
+    Behavior validated across MySLP SaaS and WordPress plugin builds.
+
+🎴_summary:
+  concise: |
+    Resolved data persistence issue with custom map markers by reloading extended data
+    during save_edited_location() execution. Prevented null-field skip condition.
+
+glyph_defs:
+  λ: method
+  Ξ: problem
+  Δ: diagnosis
+  🩹: fix
+  ✅: resolution
+  🎴: summary
