@@ -1,0 +1,19 @@
+profile: DevelopmentEnvironmentProfile
+version: "1.0"
+
+environment_meta:
+    primary_IDE: JetBrains PhpStorm
+    IDE_plugins: [ "AI Assistant", "AWS Toolkit" ]
+    artificial_intelligence_environment:
+        - IDE_agents: [ "Continue", "AI Assistant" ]
+        - Continue_agent:
+            - services: [ "local" ]
+        - AI_Assistant_agent:
+            - services: [ "local", "ChatGPT", "Claude Agent" ]
+        - local_service:
+           - hardware: NVIDIA DGX Spark
+           - hardware_LAN_IP: 192.168.0.198
+           - API_server: OpenAI
+           - API_provider: OpenWebUI
+           - Model_provider: Ollama
+           - model: deepseek-coder-v2:latest
